@@ -21,9 +21,7 @@ public class RentAMovieTest
 
     Price price = rentalShop.rent(recentMovie, numberOfDays);
 
-    Price expectedPrice = new Price(
-        new BigDecimal("40.00").multiply(new BigDecimal(numberOfDays)),
-        Currency.getInstance("SEK"));
+    Price expectedPrice = new Price( new BigDecimal("40.00"), Currency.getInstance("SEK"));
 
     assertEquals(expectedPrice, price);
   }
@@ -36,9 +34,7 @@ public class RentAMovieTest
 
     Price price = rentalShop.rent(recentMovie, numberOfDays);
 
-    Price expectedPrice = new Price(
-        new BigDecimal("90.00").multiply(new BigDecimal(numberOfDays)),
-        Currency.getInstance("SEK"));
+    Price expectedPrice = new Price( new BigDecimal("90.00"), Currency.getInstance("SEK"));
 
     assertEquals(expectedPrice, price);
   }
