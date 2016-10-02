@@ -5,7 +5,7 @@ import java.util.Currency;
 
 public class RentalShop
 {
-  public Price rent(RecentMovie recentMovie, Integer numberOfDays)
+  public Price rent(Movie movie, Integer numberOfDays)
   {
     return new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
   }

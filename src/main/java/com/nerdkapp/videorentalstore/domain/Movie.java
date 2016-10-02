@@ -1,10 +1,12 @@
 package com.nerdkapp.videorentalstore.domain;
 
-public class RecentMovie
+public class Movie
 {
   private String title;
 
-  public RecentMovie(String title)
+  private PricingModel pricingModel;
+
+  public Movie(String title)
   {
     this.title = title;
   }
