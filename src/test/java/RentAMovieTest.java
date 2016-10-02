@@ -13,18 +13,31 @@ public class RentAMovieTest
 
   RentalShop rentalShop = new RentalShop();
 
-  Price premiumPrice = new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
-
   @Test
   public void rent_a_new_movie() throws Exception
   {
     RecentMovie recentMovie = new RecentMovie("Matrix");
-    int numberOfDays = 4;
+    int numberOfDays = 1;
 
     Price price = rentalShop.rent(recentMovie, numberOfDays);
 
     Price expectedPrice = new Price(
         new BigDecimal("40.00").multiply(new BigDecimal(numberOfDays)),
+        Currency.getInstance("SEK"));
+
+    assertEquals(expectedPrice, price);
+  }
+
+  @Test
+  public void rent_a_regular_movie() throws Exception
+  {
+    RecentMovie recentMovie = new RecentMovie("Matrix");
+    int numberOfDays = 5;
+
+    Price price = rentalShop.rent(recentMovie, numberOfDays);
+
+    Price expectedPrice = new Price(
+        new BigDecimal("90.00").multiply(new BigDecimal(numberOfDays)),
         Currency.getInstance("SEK"));
 
     assertEquals(expectedPrice, price);

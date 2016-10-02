@@ -7,9 +7,6 @@ public class RentalShop
 {
   public Price rent(RecentMovie recentMovie, Integer numberOfDays)
   {
-
-
-
-    return new Price(new BigDecimal("160.00"), Currency.getInstance("SEK"));
+    return new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
   }
 }
