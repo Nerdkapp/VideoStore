@@ -93,4 +93,25 @@ public class RentalShopTest
 
     assertEquals(new Price(new BigDecimal("90.00"), SEK), price);
   }
+
+  @Test
+  public void return_multiple_movies() throws Exception
+  {
+    UUID rentalId = UUID.randomUUID();
+    RentedMovies rentedMovies = new RentedMovies(
+        rentalId,
+        Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing()), new Movie("Matrix", new PremiumMoviePricing())),
+        LocalDate.now());
+
+    context.checking(new Expectations(){{
+        oneOf(rentalRepository).retrieveRentedMovies(rentalId);
+      will(returnValue(rentedMovies));
+        oneOf(clock).now();
+      will(returnValue(LocalDate.now().plus(3, ChronoUnit.DAYS)));
+    }});
+
+    Price price = rentalShop.returnMovies(rentalId);
+
+    assertEquals(new Price(new BigDecimal("150.00"), SEK), price);
+  }
 }
