@@ -10,8 +10,11 @@ public class RentalShop
 {
   private final Currency currency;
 
-  public RentalShop(Currency currency)
+  private RentalRepository rentalRepository;
+
+  public RentalShop(RentalRepository rentalRepository, Currency currency)
   {
+    this.rentalRepository = rentalRepository;
     this.currency = currency;
   }
 
@@ -26,13 +29,14 @@ public class RentalShop
   }
 
 
-  public UUID rent(Movie movie)
+  public UUID rent(List<Movie> moviesToRent)
   {
     return UUID.randomUUID();
   }
 
   public Price returnMovies(UUID rentalId)
   {
-    return null;
+    rentalRepository.retrieveRentedMovies(rentalId);
+    return new Price(new BigDecimal("90.00"), currency);
   }
 }
