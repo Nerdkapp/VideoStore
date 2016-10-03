@@ -30,4 +30,9 @@ public class RentalShop
   {
     return UUID.randomUUID();
   }
+
+  public Price returnMovies(UUID rentalId)
+  {
+    return null;
+  }
 }

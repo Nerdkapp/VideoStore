@@ -55,10 +55,17 @@ public class RentalShopTest
     assertEquals(expectedPrice, price);
   }
 
-  @Test @Ignore("I neeed to do some refactoring")
+  @Test
   public void rent_a_movie() throws Exception
   {
     UUID rentalId = rentalShop.rent(new Movie("Spiderman 100", new RegularMoviePricing()));
     assertNotNull(rentalId);
+  }
+
+  @Test @Ignore("It's time for a repository")
+  public void return_a_movie() throws Exception
+  {
+    UUID rentalId = rentalShop.rent(new Movie("Spiderman 100", new RegularMoviePricing()));
+    Price price = rentalShop.returnMovies(rentalId);
   }
 }
