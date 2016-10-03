@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RentAMovieTest
 {
-  RentalShop rentalShop = new RentalShop();
+  RentalShop rentalShop = new RentalShop(Currency.getInstance("SEK"));
 
   @Test
   public void rent_a_new_movie() throws Exception
@@ -27,7 +27,7 @@ public class RentAMovieTest
     assertEquals(expectedPrice, price);
   }
 
-  @Test @Ignore("I'm working on the pricing model")
+  @Test
   public void rent_a_regular_movie() throws Exception
   {
     Movie movie = new Movie("Matrix", new PremiumMoviePricing());
@@ -35,7 +35,7 @@ public class RentAMovieTest
 
     Price price = rentalShop.rent(movie, numberOfDays);
 
-    Price expectedPrice = new Price( new BigDecimal("90.00"), Currency.getInstance("SEK"));
+    Price expectedPrice = new Price( new BigDecimal("200.00"), Currency.getInstance("SEK"));
 
     assertEquals(expectedPrice, price);
   }

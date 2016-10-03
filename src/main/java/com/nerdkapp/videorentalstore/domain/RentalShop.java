@@ -5,8 +5,15 @@ import java.util.Currency;
 
 public class RentalShop
 {
+  private final Currency currency;
+
+  public RentalShop(Currency currency)
+  {
+    this.currency = currency;
+  }
+
   public Price rent(Movie movie, Integer numberOfDays)
   {
-    return new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
+    return new Price(movie.calculatePrice(numberOfDays), currency);
   }
 }
