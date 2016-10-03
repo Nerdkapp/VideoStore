@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental.pricing;
+package com.nerdkapp.videorentalstore.domain;
 
 import com.nerdkapp.videorentalstore.domain.pricing.OldMoviePricing;
 import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;

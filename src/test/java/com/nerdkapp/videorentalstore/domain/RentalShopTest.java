@@ -2,6 +2,7 @@ package com.nerdkapp.videorentalstore.domain;
 
 import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -51,5 +52,13 @@ public class RentalShopTest
     Price expectedPrice = new Price( new BigDecimal("130.00"), Currency.getInstance("SEK"));
 
     assertEquals(expectedPrice, price);
+  }
+
+  @Test @Ignore("I neeed to do some refactoring")
+  public void return_a_movie() throws Exception
+  {
+//    Rental rental = new Rental(new Movie("Spiderman 100", new RegularMoviePricing()), 5);
+//
+//    rentalShop.returnMovie();
   }
 }
