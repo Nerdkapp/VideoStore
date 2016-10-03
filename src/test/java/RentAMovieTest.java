@@ -1,6 +1,7 @@
 import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.Movie;
 import com.nerdkapp.videorentalstore.domain.RentalShop;
+import com.nerdkapp.videorentalstore.infrastructure.rental.pricing.PremiumMoviePricing;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class RentAMovieTest
   @Test
   public void rent_a_new_movie() throws Exception
   {
-    Movie movie = new Movie("Matrix");
+    Movie movie = new Movie("Matrix", new PremiumMoviePricing());
     int numberOfDays = 1;
 
     Price price = rentalShop.rent(movie, numberOfDays);
@@ -29,7 +30,7 @@ public class RentAMovieTest
   @Test @Ignore("I'm working on the pricing model")
   public void rent_a_regular_movie() throws Exception
   {
-    Movie movie = new Movie("Matrix");
+    Movie movie = new Movie("Matrix", new PremiumMoviePricing());
     int numberOfDays = 5;
 
     Price price = rentalShop.rent(movie, numberOfDays);
