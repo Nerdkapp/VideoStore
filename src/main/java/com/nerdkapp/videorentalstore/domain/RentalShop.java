@@ -1,21 +1,21 @@
 package com.nerdkapp.videorentalstore.domain;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.List;
-import java.util.UUID;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 public class RentalShop
 {
   private final Currency currency;
 
   private RentalRepository rentalRepository;
+  private RegularClock clock;
 
-  public RentalShop(RentalRepository rentalRepository, Currency currency)
+  public RentalShop(RentalRepository rentalRepository, Currency currency, RegularClock clock)
   {
     this.rentalRepository = rentalRepository;
     this.currency = currency;
+    this.clock = clock;
   }
 
   public Price calculateExpectedPrice(List<Rental> rentals)
@@ -36,7 +36,11 @@ public class RentalShop
 
   public Price returnMovies(UUID rentalId)
   {
-    rentalRepository.retrieveRentedMovies(rentalId);
-    return new Price(new BigDecimal("90.00"), currency);
+    RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
+    int daysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getRentalDate(), clock.now());
+
+    return new Price(rentedMovies.getMovies().stream().
+        map(movie -> movie.getPricingModel().calculatePrice(daysOfRental)).
+        reduce(BigDecimal.ZERO, BigDecimal::add), currency);
   }
 }

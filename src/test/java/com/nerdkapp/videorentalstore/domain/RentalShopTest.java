@@ -4,14 +4,14 @@ import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Currency;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
@@ -22,7 +22,8 @@ public class RentalShopTest
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
-  RentalShop rentalShop = new RentalShop(rentalRepository, Currency.getInstance("SEK"));
+  RegularClock clock = context.mock(RegularClock.class);
+  RentalShop rentalShop = new RentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
 
   Currency SEK = Currency.getInstance("SEK");
 
@@ -75,12 +76,17 @@ public class RentalShopTest
   @Test
   public void return_a_movie() throws Exception
   {
-    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing()));
-    UUID rentalId = rentalShop.rent(moviesToRent);
+    UUID rentalId = UUID.randomUUID();
+    RentedMovies rentedMovies = new RentedMovies(
+        rentalId,
+        Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing())),
+        LocalDate.now());
 
     context.checking(new Expectations(){{
       oneOf(rentalRepository).retrieveRentedMovies(rentalId);
-        will(returnValue(moviesToRent));
+        will(returnValue(rentedMovies));
+      oneOf(clock).now();
+        will(returnValue(LocalDate.now().plus(5, ChronoUnit.DAYS)));
     }});
 
     Price price = rentalShop.returnMovies(rentalId);
