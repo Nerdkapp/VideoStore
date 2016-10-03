@@ -1,9 +1,5 @@
 package com.nerdkapp.videorentalstore.domain;
 
-import com.nerdkapp.videorentalstore.infrastructure.rental.pricing.PremiumMoviePricing;
-
-import java.math.BigDecimal;
-
 public class Movie
 {
   private final String title;
@@ -21,8 +17,5 @@ public class Movie
     return title;
   }
 
-  public BigDecimal calculatePrice(int numberOfDaysToRent)
-  {
-    return pricingModel.calculatePrice(numberOfDaysToRent);
-  }
+  public PricingModel getPricingModel(){ return pricingModel; }
 }

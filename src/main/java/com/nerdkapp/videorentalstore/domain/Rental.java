@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 
 public class Rental
 {
-  private final Movie matrix;
+  private final Movie movie;
   private final int daysOfRental;
 
-  public Rental(Movie matrix, int daysOfRental)
+  public Rental(Movie movie, int daysOfRental)
   {
-    this.matrix = matrix;
+    this.movie = movie;
     this.daysOfRental = daysOfRental;
   }
 
   public BigDecimal calculate()
   {
-    return this.matrix.calculatePrice(daysOfRental);
+    return movie.getPricingModel().calculatePrice(daysOfRental);
   }
 }

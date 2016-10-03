@@ -1,19 +1,16 @@
-import com.nerdkapp.videorentalstore.domain.Price;
-import com.nerdkapp.videorentalstore.domain.Movie;
-import com.nerdkapp.videorentalstore.domain.Rental;
-import com.nerdkapp.videorentalstore.domain.RentalShop;
+package com.nerdkapp.videorentalstore.domain;
+
 import com.nerdkapp.videorentalstore.infrastructure.rental.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.infrastructure.rental.pricing.RegularMoviePricing;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Currency;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class RentAMovieTest
+public class RentalShopTest
 {
   RentalShop rentalShop = new RentalShop(Currency.getInstance("SEK"));
 
@@ -23,7 +20,7 @@ public class RentAMovieTest
     Movie movie = new Movie("Matrix", new PremiumMoviePricing());
     int numberOfDays = 1;
 
-    Price price = rentalShop.rent(movie, numberOfDays);
+    Price price = rentalShop.rent(new Rental(movie, numberOfDays));
 
     Price expectedPrice = new Price( new BigDecimal("40.00"), Currency.getInstance("SEK"));
 
@@ -36,7 +33,7 @@ public class RentAMovieTest
     Movie movie = new Movie("Matrix", new RegularMoviePricing());
     int numberOfDays = 5;
 
-    Price price = rentalShop.rent(movie, numberOfDays);
+    Price price = rentalShop.rent(new Rental(movie, numberOfDays));
 
     Price expectedPrice = new Price( new BigDecimal("90.00"), Currency.getInstance("SEK"));
 
