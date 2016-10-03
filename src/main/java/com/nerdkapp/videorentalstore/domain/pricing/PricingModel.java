@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.domain;
+package com.nerdkapp.videorentalstore.domain.pricing;
 
 import java.math.BigDecimal;
 

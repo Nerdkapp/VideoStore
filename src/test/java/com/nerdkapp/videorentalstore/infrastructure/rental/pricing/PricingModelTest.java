@@ -1,5 +1,8 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.pricing;
 
+import com.nerdkapp.videorentalstore.domain.pricing.OldMoviePricing;
+import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
 import org.junit.Test;
 
 import java.math.BigDecimal;

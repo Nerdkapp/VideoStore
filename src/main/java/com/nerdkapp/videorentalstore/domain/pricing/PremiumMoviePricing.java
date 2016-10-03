@@ -1,7 +1,6 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental.pricing;
+package com.nerdkapp.videorentalstore.domain.pricing;
 
-import com.nerdkapp.videorentalstore.domain.Price;
-import com.nerdkapp.videorentalstore.domain.PricingModel;
+import com.nerdkapp.videorentalstore.domain.pricing.PricingModel;
 
 import java.math.BigDecimal;
 

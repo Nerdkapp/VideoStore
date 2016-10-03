@@ -1,5 +1,7 @@
 package com.nerdkapp.videorentalstore.domain;
 
+import com.nerdkapp.videorentalstore.domain.pricing.PricingModel;
+
 public class Movie
 {
   private final String title;
