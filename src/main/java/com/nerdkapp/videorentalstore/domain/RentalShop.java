@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
+import java.util.UUID;
 
 public class RentalShop
 {
@@ -14,15 +15,19 @@ public class RentalShop
     this.currency = currency;
   }
 
-  public Price rent(List<Rental> rentals)
+  public Price calculateExpectedPrice(List<Rental> rentals)
   {
     return new Price(rentals.stream().map(rental -> rental.calculate()).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
   }
 
-  public Price rent(Rental rental)
+  public Price calculateExpectedPrice(Rental rental)
   {
-    return rent(Arrays.asList(rental));
+    return calculateExpectedPrice(Arrays.asList(rental));
   }
 
 
+  public UUID rent(Movie movie)
+  {
+    return UUID.randomUUID();
+  }
 }
