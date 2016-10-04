@@ -2,14 +2,19 @@ package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.Movie;
 import com.nerdkapp.videorentalstore.domain.Price;
+import com.nerdkapp.videorentalstore.domain.RentalShop;
+import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/rent")
@@ -17,16 +22,33 @@ public class RentResource
 {
   private static final Logger LOGGER = LoggerFactory.getLogger(RentResource.class);
 
+  private RentalShop rentalShop;
+
+  @Autowired
+  public RentResource(RentalShop rentalShop)
+  {
+    this.rentalShop = rentalShop;
+  }
+
   @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
   public RentalResponse rent(@PathVariable("userId") String userId, @RequestBody RentalRequest rentalRequest){
     LOGGER.info("User {} asked to rent {}", userId, rentalRequest);
-    return new RentalResponse(UUID.randomUUID());
+
+    List<Movie> moviesToRent = rentalRequest.getMovies().stream().
+        map(r -> new Movie(r.title, new PremiumMoviePricing())).
+        collect(Collectors.toList());
+
+    UUID rentalId = rentalShop.rent(moviesToRent);
+
+    return new RentalResponse(rentalId);
   }
 
   @RequestMapping(value = "/{userId}/{rentalId}", method = RequestMethod.PUT)
   public ReturnMoviesResponse returnMovies(@PathVariable("userId") String userId, @PathVariable UUID rentalId){
     LOGGER.info("User {} returned rented movies for rental id: {}", userId, rentalId);
-    return new ReturnMoviesResponse();
+    Price price = rentalShop.returnMovies(rentalId);
+
+    return new ReturnMoviesResponse(price.getAmount(), price.getCurrency());
   }
 
   public static class RentalRequest
@@ -146,6 +168,16 @@ public class RentResource
       sb.append(", currency=").append(currency);
       sb.append('}');
       return sb.toString();
+    }
+
+    public BigDecimal getAmountToPay()
+    {
+      return amountToPay;
+    }
+
+    public Currency getCurrency()
+    {
+      return currency;
     }
   }
 }

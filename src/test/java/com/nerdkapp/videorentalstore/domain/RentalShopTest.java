@@ -2,6 +2,7 @@ package com.nerdkapp.videorentalstore.domain;
 
 import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.infrastructure.rental.DefaultRentalShop;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -23,7 +24,7 @@ public class RentalShopTest
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
   RegularClock clock = context.mock(RegularClock.class);
-  RentalShop rentalShop = new RentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
+  DefaultRentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
 
   Currency SEK = Currency.getInstance("SEK");
 

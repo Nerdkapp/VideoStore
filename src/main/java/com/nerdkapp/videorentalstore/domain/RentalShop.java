@@ -1,46 +1,15 @@
 package com.nerdkapp.videorentalstore.domain;
 
-import java.math.BigDecimal;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
-public class RentalShop
+public interface RentalShop
 {
-  private final Currency currency;
+  Price calculateExpectedPrice(List<Rental> rentals);
 
-  private RentalRepository rentalRepository;
-  private RegularClock clock;
+  Price calculateExpectedPrice(Rental rental);
 
-  public RentalShop(RentalRepository rentalRepository, Currency currency, RegularClock clock)
-  {
-    this.rentalRepository = rentalRepository;
-    this.currency = currency;
-    this.clock = clock;
-  }
+  UUID rent(List<Movie> moviesToRent);
 
-  public Price calculateExpectedPrice(List<Rental> rentals)
-  {
-    return new Price(rentals.stream().map(rental -> rental.calculate()).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
-  }
-
-  public Price calculateExpectedPrice(Rental rental)
-  {
-    return calculateExpectedPrice(Arrays.asList(rental));
-  }
-
-
-  public UUID rent(List<Movie> moviesToRent)
-  {
-    return UUID.randomUUID();
-  }
-
-  public Price returnMovies(UUID rentalId)
-  {
-    RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
-    int daysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getRentalDate(), clock.now());
-
-    return new Price(rentedMovies.getMovies().stream().
-        map(movie -> movie.getPricingModel().calculatePrice(daysOfRental)).
-        reduce(BigDecimal.ZERO, BigDecimal::add), currency);
-  }
+  Price returnMovies(UUID rentalId);
 }
