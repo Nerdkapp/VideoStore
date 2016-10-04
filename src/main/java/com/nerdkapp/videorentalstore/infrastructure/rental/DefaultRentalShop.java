@@ -5,6 +5,7 @@ import com.nerdkapp.videorentalstore.domain.*;
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DefaultRentalShop implements RentalShop
 {
@@ -34,9 +35,10 @@ public class DefaultRentalShop implements RentalShop
 
 
   @Override
-  public UUID rent(List<Movie> moviesToRent)
+  public UUID rent(List<String> moviesToRent)
   {
-    return UUID.randomUUID();
+    List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
+    return rentalRepository.rentMovies(movies);
   }
 
   @Override

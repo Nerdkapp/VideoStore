@@ -34,8 +34,8 @@ public class RentResource
   public RentalResponse rent(@PathVariable("userId") String userId, @RequestBody RentalRequest rentalRequest){
     LOGGER.info("User {} asked to rent {}", userId, rentalRequest);
 
-    List<Movie> moviesToRent = rentalRequest.getMovies().stream().
-        map(r -> new Movie(r.title, new PremiumMoviePricing())).
+    List<String> moviesToRent = rentalRequest.getMovies().stream().
+        map(r -> r.getTitle()).
         collect(Collectors.toList());
 
     UUID rentalId = rentalShop.rent(moviesToRent);

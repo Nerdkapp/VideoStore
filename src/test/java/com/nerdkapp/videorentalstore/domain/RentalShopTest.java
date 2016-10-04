@@ -24,7 +24,7 @@ public class RentalShopTest
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
   RegularClock clock = context.mock(RegularClock.class);
-  DefaultRentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
+  RentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
 
   Currency SEK = Currency.getInstance("SEK");
 
@@ -70,8 +70,20 @@ public class RentalShopTest
   @Test
   public void rent_a_movie() throws Exception
   {
-    UUID rentalId = rentalShop.rent(Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing())));
-    assertNotNull(rentalId);
+    String movie = "Spiderman";
+    Movie movieFoundOnRepo = new Movie(movie, new RegularMoviePricing());
+
+    UUID rentalId = UUID.randomUUID();
+
+    context.checking(new Expectations(){{
+      oneOf(rentalRepository).findMovie(movie);
+      will(returnValue(movieFoundOnRepo));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo));
+      will(returnValue(rentalId));
+    }});
+
+    UUID customerRentalId = rentalShop.rent(Arrays.asList(movie));
+    assertEquals(rentalId, customerRentalId);
   }
 
   @Test

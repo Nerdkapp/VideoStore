@@ -28,7 +28,7 @@ public class RentResourceTest
   @Test
   public void rent_a_movie() throws Exception
   {
-    List<Movie> moviesToRent = Arrays.asList(new Movie("Matrix", new PremiumMoviePricing()));
+    List<String> moviesToRent = Arrays.asList("Matrix");
     UUID rentalId = UUID.randomUUID();
 
     context.checking(new Expectations(){{

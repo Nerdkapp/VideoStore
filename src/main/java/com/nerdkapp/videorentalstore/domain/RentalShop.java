@@ -9,7 +9,7 @@ public interface RentalShop
 
   Price calculateExpectedPrice(Rental rental);
 
-  UUID rent(List<Movie> moviesToRent);
+  UUID rent(List<String> moviesToRent);
 
   Price returnMovies(UUID rentalId);
 }
