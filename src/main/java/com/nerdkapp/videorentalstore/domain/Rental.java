@@ -1,5 +1,7 @@
 package com.nerdkapp.videorentalstore.domain;
 
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
+
 import java.math.BigDecimal;
 
 public class Rental

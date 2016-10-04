@@ -1,9 +1,7 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
-import com.nerdkapp.videorentalstore.domain.Movie;
 import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.RentalShop;
-import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;

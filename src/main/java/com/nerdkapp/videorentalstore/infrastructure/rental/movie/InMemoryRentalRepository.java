@@ -1,11 +1,12 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
-import com.nerdkapp.videorentalstore.domain.Movie;
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.RentedMovies;
-import com.nerdkapp.videorentalstore.domain.pricing.OldMoviePricing;
-import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
-import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -15,12 +16,12 @@ import java.util.Map;
 import java.util.UUID;
 
 @Component
-public class InMemoryMovieRepository implements RentalRepository
+public class InMemoryRentalRepository implements RentalRepository
 {
   private Map<String, Movie> movies;
   private Map<UUID, RentedMovies> rentedMovies;
 
-  public InMemoryMovieRepository()
+  public InMemoryRentalRepository()
   {
     movies = new HashMap<>();
     movies.put("Matrix 11", new Movie("Matrix 11", new PremiumMoviePricing()));
@@ -31,7 +32,7 @@ public class InMemoryMovieRepository implements RentalRepository
     rentedMovies = new HashMap<>();
   }
 
-  public InMemoryMovieRepository(Map<String, Movie> movies)
+  public InMemoryRentalRepository(Map<String, Movie> movies)
   {
     this.movies = movies;
     this.rentedMovies = new HashMap<>();
@@ -46,7 +47,12 @@ public class InMemoryMovieRepository implements RentalRepository
   @Override
   public Movie findMovie(String movie)
   {
-    return movies.get(movie);
+    Movie movieFound = movies.get(movie);
+
+    if(movieFound == null)
+      throw new MovieNotFoundException();
+
+    return movieFound;
   }
 
   @Override

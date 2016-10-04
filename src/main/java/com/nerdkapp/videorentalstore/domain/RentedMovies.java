@@ -1,5 +1,7 @@
 package com.nerdkapp.videorentalstore.domain;
 
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;

@@ -1,16 +1,13 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
-import com.nerdkapp.videorentalstore.domain.Movie;
 import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.RentalShop;
-import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.UUID;

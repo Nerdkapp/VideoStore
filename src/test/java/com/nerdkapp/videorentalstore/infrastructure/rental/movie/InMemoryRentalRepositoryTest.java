@@ -1,10 +1,11 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
-import com.nerdkapp.videorentalstore.domain.Movie;
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.RentedMovies;
-import com.nerdkapp.videorentalstore.domain.pricing.OldMoviePricing;
-import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
-import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,9 +14,9 @@ import java.util.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class InMemoryMovieRepositoryTest
+public class InMemoryRentalRepositoryTest
 {
-  InMemoryMovieRepository repository;
+  InMemoryRentalRepository repository;
 
   @Before
   public void setUp() throws Exception
@@ -25,7 +26,7 @@ public class InMemoryMovieRepositoryTest
     movieDB.put("Spiderman", new Movie("Spiderman", new RegularMoviePricing()));
     movieDB.put("Spiderman 2", new Movie("Spiderman 2", new RegularMoviePricing()));
     movieDB.put("Out of Africa", new Movie("Out of Africa", new OldMoviePricing()));
-    repository = new InMemoryMovieRepository(movieDB);
+    repository = new InMemoryRentalRepository(movieDB);
   }
 
   @Test
@@ -35,6 +36,12 @@ public class InMemoryMovieRepositoryTest
 
     assertEquals("Spiderman", movie.getTitle());
     assertEquals(new RegularMoviePricing(), movie.getPricingModel());
+  }
+
+  @Test(expected = MovieNotFoundException.class)
+  public void movie_not_found() throws Exception
+  {
+    repository.findMovie("Not existent movie");
   }
 
   @Test

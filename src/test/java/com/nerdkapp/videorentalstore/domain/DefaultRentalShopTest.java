@@ -1,7 +1,9 @@
 package com.nerdkapp.videorentalstore.domain;
 
-import com.nerdkapp.videorentalstore.domain.pricing.PremiumMoviePricing;
-import com.nerdkapp.videorentalstore.domain.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
+import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
 import com.nerdkapp.videorentalstore.infrastructure.rental.DefaultRentalShop;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
@@ -80,6 +82,25 @@ public class DefaultRentalShopTest
       will(returnValue(movieFoundOnRepo));
       oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo));
       will(returnValue(rentalId));
+    }});
+
+    UUID customerRentalId = rentalShop.rent(Arrays.asList(movie));
+    assertEquals(rentalId, customerRentalId);
+  }
+
+  @Test(expected = MovieNotFoundException.class)
+  public void throw_expection_when_movie_is_not_found() throws Exception
+  {
+    String movie = "Movie not existent";
+    Movie movieFoundOnRepo = new Movie(movie, new RegularMoviePricing());
+
+    UUID rentalId = UUID.randomUUID();
+
+    context.checking(new Expectations(){{
+      oneOf(rentalRepository).findMovie(movie);
+      will(returnValue(movieFoundOnRepo));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo));
+      will(throwException(new MovieNotFoundException()));
     }});
 
     UUID customerRentalId = rentalShop.rent(Arrays.asList(movie));

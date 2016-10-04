@@ -1,6 +1,7 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.*;
+import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
