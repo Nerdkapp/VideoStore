@@ -35,6 +35,9 @@ public class PremiumMoviePricing implements PricingModel
   @Override
   public BigDecimal calculatePrice(Integer daysOfRental)
   {
-    return premiumPrice.multiply(new BigDecimal(daysOfRental));
+    if(daysOfRental > 1)
+      return premiumPrice.multiply(new BigDecimal(daysOfRental));
+    else
+      return premiumPrice;
   }
 }
