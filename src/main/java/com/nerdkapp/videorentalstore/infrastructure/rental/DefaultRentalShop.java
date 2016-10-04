@@ -1,12 +1,18 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Component
 public class DefaultRentalShop implements RentalShop
 {
   private final Currency currency;
@@ -14,6 +20,7 @@ public class DefaultRentalShop implements RentalShop
   private RentalRepository rentalRepository;
   private RegularClock clock;
 
+  @Autowired
   public DefaultRentalShop(RentalRepository rentalRepository, Currency currency, RegularClock clock)
   {
     this.rentalRepository = rentalRepository;
