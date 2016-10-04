@@ -22,7 +22,7 @@ public class InMemoryMovieRepository implements RentalRepository
 
   public InMemoryMovieRepository()
   {
-    Map<String, Movie> movies = new HashMap<>();
+    movies = new HashMap<>();
     movies.put("Matrix 11", new Movie("Matrix 11", new PremiumMoviePricing()));
     movies.put("Spiderman", new Movie("Spiderman", new RegularMoviePricing()));
     movies.put("Spiderman 2", new Movie("Spiderman 2", new RegularMoviePricing()));

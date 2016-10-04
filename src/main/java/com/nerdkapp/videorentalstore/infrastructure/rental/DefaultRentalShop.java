@@ -18,10 +18,10 @@ public class DefaultRentalShop implements RentalShop
   private final Currency currency;
 
   private RentalRepository rentalRepository;
-  private RegularClock clock;
+  private Clock clock;
 
   @Autowired
-  public DefaultRentalShop(RentalRepository rentalRepository, Currency currency, RegularClock clock)
+  public DefaultRentalShop(RentalRepository rentalRepository, Currency currency, Clock clock)
   {
     this.rentalRepository = rentalRepository;
     this.currency = currency;
@@ -54,8 +54,13 @@ public class DefaultRentalShop implements RentalShop
     RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
     int daysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getRentalDate(), clock.now());
 
-    return new Price(rentedMovies.getMovies().stream().
-        map(movie -> movie.getPricingModel().calculatePrice(daysOfRental)).
-        reduce(BigDecimal.ZERO, BigDecimal::add), currency);
+    BigDecimal amountToPay = new BigDecimal(0);
+
+    for(Movie movie : rentedMovies.getMovies())
+    {
+      amountToPay = amountToPay.add(movie.getPricingModel().calculatePrice(daysOfRental));
+    }
+
+    return new Price(amountToPay, currency);
   }
 }

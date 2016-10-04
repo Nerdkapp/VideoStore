@@ -17,13 +17,13 @@ import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-public class RentalShopTest
+public class DefaultRentalShopTest
 {
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
-  RegularClock clock = context.mock(RegularClock.class);
+  Clock clock = context.mock(Clock.class);
   RentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
 
   Currency SEK = Currency.getInstance("SEK");
