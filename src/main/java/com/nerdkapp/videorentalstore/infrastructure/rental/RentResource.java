@@ -20,7 +20,13 @@ public class RentResource
   @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
   public RentalResponse rent(@PathVariable("userId") String userId, @RequestBody RentalRequest rentalRequest){
     LOGGER.info("User {} asked to rent {}", userId, rentalRequest);
-    return null;
+    return new RentalResponse(UUID.randomUUID());
+  }
+
+  @RequestMapping(value = "/{userId}/{rentalId}", method = RequestMethod.PUT)
+  public ReturnMoviesResponse returnMovies(@PathVariable("userId") String userId, @PathVariable UUID rentalId){
+    LOGGER.info("User {} returned rented movies for rental id: {}", userId, rentalId);
+    return new ReturnMoviesResponse();
   }
 
   public static class RentalRequest
@@ -29,6 +35,11 @@ public class RentResource
 
     public RentalRequest()
     {
+    }
+
+    public RentalRequest(List<MovieRequest> movies)
+    {
+      this.movies = movies;
     }
 
     public List<MovieRequest> getMovies()
@@ -59,6 +70,11 @@ public class RentResource
     {
     }
 
+    public MovieRequest(String title)
+    {
+      this.title = title;
+    }
+
     public String getTitle()
     {
       return title;
@@ -82,18 +98,14 @@ public class RentResource
   public static class RentalResponse
   {
     private UUID rentalId;
-    private BigDecimal amountToPay;
-    private Currency currency;
 
     public RentalResponse()
     {
     }
 
-    public RentalResponse(UUID rentalId, BigDecimal amountToPay, Currency currency)
+    public RentalResponse(UUID rentalId)
     {
       this.rentalId = rentalId;
-      this.amountToPay = amountToPay;
-      this.currency = currency;
     }
 
     public UUID getRentalId()
@@ -101,22 +113,36 @@ public class RentResource
       return rentalId;
     }
 
-    public BigDecimal getAmountToPay()
-    {
-      return amountToPay;
-    }
-
-    public Currency getCurrency()
-    {
-      return currency;
-    }
-
     @Override
     public String toString()
     {
       final StringBuffer sb = new StringBuffer("RentalResponse{");
       sb.append("rentalId=").append(rentalId);
-      sb.append(", amountToPay=").append(amountToPay);
+      sb.append('}');
+      return sb.toString();
+    }
+  }
+
+  public static class ReturnMoviesResponse
+  {
+    private BigDecimal amountToPay;
+    private Currency currency;
+
+    public ReturnMoviesResponse()
+    {
+    }
+
+    public ReturnMoviesResponse(BigDecimal amountToPay, Currency currency)
+    {
+      this.amountToPay = amountToPay;
+      this.currency = currency;
+    }
+
+    @Override
+    public String toString()
+    {
+      final StringBuffer sb = new StringBuffer("ReturnMoviesResponse{");
+      sb.append("amountToPay=").append(amountToPay);
       sb.append(", currency=").append(currency);
       sb.append('}');
       return sb.toString();
