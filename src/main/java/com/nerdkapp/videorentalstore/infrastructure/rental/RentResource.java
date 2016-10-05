@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Currency;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,15 +38,20 @@ public class RentResource
         map(r -> r.getTitle()).
         collect(Collectors.toList());
 
-    RentalReceipt rentalReceipt = rentalShop.rent(moviesToRent, rentalRequest.getStartRentalDate(), rentalRequest.getEndRentalData());
+    RentalReceipt rentalReceipt = rentalShop.rent(moviesToRent,
+        rentalRequest.getStartRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+        rentalRequest.getEndRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
     return new RentalResponse(rentalReceipt.getRentalId(), rentalReceipt.getPrice().getAmount(), rentalReceipt.getPrice().getCurrency());
   }
 
-  @RequestMapping(value = "/{userId}/{rentalId}", method = RequestMethod.PUT)
-  public ReturnMoviesResponse returnMovies(@PathVariable("userId") String userId, @PathVariable UUID rentalId){
+  @RequestMapping(value = "/{userId}/{rentalId}/{returnDate}", method = RequestMethod.PUT)
+  public ReturnMoviesResponse returnMovies(
+      @PathVariable("userId") String userId,
+      @PathVariable UUID rentalId,
+      @PathVariable Date returnDate){
     LOGGER.info("User {} returned rented movies for rental id: {}", userId, rentalId);
-    Price price = rentalShop.returnMovies(rentalId);
+    Price price = rentalShop.returnMovies(rentalId, returnDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
     return new ReturnMoviesResponse(price.getAmount(), price.getCurrency());
   }
@@ -53,18 +59,18 @@ public class RentResource
   public static class RentalRequest
   {
     private List<MovieRequest> movies;
-    private LocalDate startRentalDate;
-    private LocalDate endRentalData;
+    private Date startRentalDate;
+    private Date endRentalDate;
 
     public RentalRequest()
     {
     }
 
-    public RentalRequest(List<MovieRequest> movies, LocalDate startRentalDate, LocalDate endRentalData)
+    public RentalRequest(List<MovieRequest> movies, Date startRentalDate, Date endRentalDate)
     {
       this.movies = movies;
       this.startRentalDate = startRentalDate;
-      this.endRentalData = endRentalData;
+      this.endRentalDate = endRentalDate;
     }
 
     public List<MovieRequest> getMovies()
@@ -77,14 +83,14 @@ public class RentResource
       this.movies = movies;
     }
 
-    public LocalDate getStartRentalDate()
+    public Date getStartRentalDate()
     {
       return startRentalDate;
     }
 
-    public LocalDate getEndRentalData()
+    public Date getEndRentalDate()
     {
-      return endRentalData;
+      return endRentalDate;
     }
 
     @Override
@@ -92,6 +98,8 @@ public class RentResource
     {
       final StringBuffer sb = new StringBuffer("RentalRequest{");
       sb.append("movies=").append(movies);
+      sb.append(", startRentalDate=").append(startRentalDate);
+      sb.append(", endRentalDate=").append(endRentalDate);
       sb.append('}');
       return sb.toString();
     }

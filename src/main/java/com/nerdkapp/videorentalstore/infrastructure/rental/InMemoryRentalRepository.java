@@ -56,10 +56,10 @@ public class InMemoryRentalRepository implements RentalRepository
   }
 
   @Override
-  public UUID rentMovies(List<Movie> movies)
+  public UUID rentMovies(List<Movie> movies, LocalDate expectedReturnDate)
   {
     UUID id = UUID.randomUUID();
-    rentedMovies.put(id, new RentedMovies(id, movies, LocalDate.now()));
+    rentedMovies.put(id, new RentedMovies(id, movies, LocalDate.now(), expectedReturnDate));
     return id;
   }
 }

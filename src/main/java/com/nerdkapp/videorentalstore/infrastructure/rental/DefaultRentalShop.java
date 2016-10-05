@@ -25,14 +25,12 @@ public class DefaultRentalShop implements RentalShop
   private final Currency currency;
 
   private RentalRepository rentalRepository;
-  private Clock clock;
 
   @Autowired
-  public DefaultRentalShop(RentalRepository rentalRepository, Currency currency, Clock clock)
+  public DefaultRentalShop(RentalRepository rentalRepository, Currency currency)
   {
     this.rentalRepository = rentalRepository;
     this.currency = currency;
-    this.clock = clock;
   }
 
   @Override
@@ -57,24 +55,23 @@ public class DefaultRentalShop implements RentalShop
   public RentalReceipt rent(List<String> moviesToRent, LocalDate startRentalDate, LocalDate endRentalDate)
   {
     List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
-    UUID rentalId = rentalRepository.rentMovies(movies);
+    UUID rentalId = rentalRepository.rentMovies(movies, endRentalDate);
     Price price = calculateExpectedPrice(movies, startRentalDate, endRentalDate);
 
     return new RentalReceipt(rentalId, price);
   }
 
   @Override
-  public Price returnMovies(UUID rentalId)
+  public Price returnMovies(UUID rentalId, LocalDate localDate)
   {
-    RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
-    int daysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getRentalDate(), clock.now());
-
     BigDecimal amountToPay = new BigDecimal(0);
 
-    for(Movie movie : rentedMovies.getMovies())
-    {
-      amountToPay = amountToPay.add(movie.getPricingModel().calculatePrice(daysOfRental));
-    }
+    RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
+    int additionalDaysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getExpectedReturnDate(), localDate);
+
+    if(additionalDaysOfRental > 0)
+      for(Movie movie : rentedMovies.getMovies())
+        amountToPay = amountToPay.add(movie.getPricingModel().calculatePrice(additionalDaysOfRental));
 
     return new Price(amountToPay, currency);
   }

@@ -1,7 +1,6 @@
 package com.nerdkapp.videorentalstore.domain.rental;
 
 import com.nerdkapp.videorentalstore.domain.Price;
-import com.nerdkapp.videorentalstore.infrastructure.rental.RentResource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,7 +12,7 @@ public interface RentalShop
 
   Price calculateExpectedPrice(Rental rental);
 
-  Price returnMovies(UUID rentalId);
+  Price returnMovies(UUID rentalId, LocalDate localDate);
 
   RentalReceipt rent(List<String> movies, LocalDate startRentalDate, LocalDate endRentalData);
 }

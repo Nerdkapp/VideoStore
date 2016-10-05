@@ -9,14 +9,16 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.List;
-import java.util.UUID;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class RentResourceTest
 {
@@ -38,7 +40,10 @@ public class RentResourceTest
     Price price = new Price(new BigDecimal("10.00"), Currency.getInstance("SEK"));
 
     context.checking(new Expectations(){{
-      oneOf(rentalShop).rent(moviesList, rentalRequest.getStartRentalDate(), rentalRequest.getEndRentalData());
+      oneOf(rentalShop).rent(
+          moviesList,
+          rentalRequest.getStartRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+          rentalRequest.getEndRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
       will(returnValue(new RentalReceipt(rentalId, price)));
     }});
 
@@ -56,19 +61,34 @@ public class RentResourceTest
     Price price = new Price(new BigDecimal("100.00"), Currency.getInstance("SEK"));
 
     context.checking(new Expectations(){{
-      oneOf(rentalShop).returnMovies(rentalId);
+      oneOf(rentalShop).returnMovies(rentalId, tomorrow());
       will(returnValue(price));
     }});
 
-    RentResource.ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId);
+    RentResource.ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, tomorrowAsDate());
     assertEquals(new BigDecimal("100.00"), rentalResponse.getAmountToPay());
     assertEquals(Currency.getInstance("SEK"), rentalResponse.getCurrency());
   }
 
-
-  private RentResource.RentalRequest aRentalRequest()
+  private LocalDate tomorrow()
   {
+    return LocalDate.now().plus(1L, ChronoUnit.DAYS);
+  }
+
+  private Date tomorrowAsDate(){
+    Calendar c = Calendar.getInstance();
+    c.setTime(new Date());
+    c.add(Calendar.DATE, 1);
+    return c.getTime();
+  }
+
+  private RentResource.RentalRequest aRentalRequest() throws ParseException
+  {
+    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
     List<RentResource.MovieRequest> movies = Arrays.asList(new RentResource.MovieRequest("Matrix"));
-    return new RentResource.RentalRequest(movies, LocalDate.of(2016,10,20), LocalDate.of(2016,10,22));
+    return new RentResource.RentalRequest(movies,
+        dateFormat.parse("2016/10/20"),
+        dateFormat.parse("2016/10/22"));
   }
 }

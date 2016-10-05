@@ -18,12 +18,11 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class DefaultRentalShopTest
 {
@@ -31,8 +30,7 @@ public class DefaultRentalShopTest
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
-  Clock clock = context.mock(Clock.class);
-  RentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"), clock);
+  RentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"));
 
   Currency SEK = Currency.getInstance("SEK");
 
@@ -87,7 +85,7 @@ public class DefaultRentalShopTest
     context.checking(new Expectations(){{
       oneOf(rentalRepository).findMovie(movie);
       will(returnValue(movieFoundOnRepo));
-      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo), tomorrow());
       will(returnValue(rentalId));
     }});
 
@@ -118,7 +116,7 @@ public class DefaultRentalShopTest
     context.checking(new Expectations(){{
       oneOf(rentalRepository).findMovie(movie);
       will(returnValue(movieFoundOnRepo));
-      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo), tomorrow());
       will(throwException(new MovieNotFoundException()));
     }});
 
@@ -133,18 +131,16 @@ public class DefaultRentalShopTest
     RentedMovies rentedMovies = new RentedMovies(
         rentalId,
         Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing())),
-        LocalDate.now());
+        today(), tomorrow());
 
     context.checking(new Expectations(){{
       oneOf(rentalRepository).retrieveRentedMovies(rentalId);
         will(returnValue(rentedMovies));
-      oneOf(clock).now();
-        will(returnValue(LocalDate.now().plus(5, ChronoUnit.DAYS)));
     }});
 
-    Price price = rentalShop.returnMovies(rentalId);
+    Price price = rentalShop.returnMovies(rentalId, tomorrow());
 
-    assertEquals(new Price(new BigDecimal("90.00"), SEK), price);
+    assertEquals(new Price(new BigDecimal("0"), SEK), price);
   }
 
   @Test
@@ -154,17 +150,15 @@ public class DefaultRentalShopTest
     RentedMovies rentedMovies = new RentedMovies(
         rentalId,
         Arrays.asList(new Movie("Spiderman 100", new RegularMoviePricing()), new Movie("Matrix", new PremiumMoviePricing())),
-        LocalDate.now());
+        today(), tomorrow());
 
     context.checking(new Expectations(){{
         oneOf(rentalRepository).retrieveRentedMovies(rentalId);
       will(returnValue(rentedMovies));
-        oneOf(clock).now();
-      will(returnValue(LocalDate.now().plus(3, ChronoUnit.DAYS)));
     }});
 
-    Price price = rentalShop.returnMovies(rentalId);
+    Price price = rentalShop.returnMovies(rentalId, tomorrow());
 
-    assertEquals(new Price(new BigDecimal("150.00"), SEK), price);
+    assertEquals(new Price(new BigDecimal("0"), SEK), price);
   }
 }

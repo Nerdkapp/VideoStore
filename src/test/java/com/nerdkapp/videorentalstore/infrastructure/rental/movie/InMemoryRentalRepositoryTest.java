@@ -10,6 +10,8 @@ import com.nerdkapp.videorentalstore.infrastructure.rental.InMemoryRentalReposit
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -50,7 +52,7 @@ public class InMemoryRentalRepositoryTest
   {
     List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
 
-    UUID rentalId = repository.rentMovies(moviesToRent);
+    UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     assertNotNull(rentalId);
   }
 
@@ -59,8 +61,13 @@ public class InMemoryRentalRepositoryTest
   {
     List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
 
-    UUID rentalId = repository.rentMovies(moviesToRent);
+    UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     RentedMovies retrievedMovies = repository.retrieveRentedMovies(rentalId);
     assertEquals(moviesToRent, retrievedMovies.getMovies());
+  }
+
+  private LocalDate tomorrow()
+  {
+    return LocalDate.now().plus(1L, ChronoUnit.DAYS);
   }
 }
