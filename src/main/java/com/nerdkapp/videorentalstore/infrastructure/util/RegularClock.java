@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental;
+package com.nerdkapp.videorentalstore.infrastructure.util;
 
 import com.nerdkapp.videorentalstore.domain.Clock;
 import org.springframework.stereotype.Component;

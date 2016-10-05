@@ -2,8 +2,12 @@ package com.nerdkapp.videorentalstore.domain;
 
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
+import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.rental.Rental;
+import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
+import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import com.nerdkapp.videorentalstore.infrastructure.rental.DefaultRentalShop;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;

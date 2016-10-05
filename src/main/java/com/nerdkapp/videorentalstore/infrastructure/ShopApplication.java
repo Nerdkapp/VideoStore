@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental;
+package com.nerdkapp.videorentalstore.infrastructure;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

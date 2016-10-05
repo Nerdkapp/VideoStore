@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.domain;
+package com.nerdkapp.videorentalstore.domain.movies;
 
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 

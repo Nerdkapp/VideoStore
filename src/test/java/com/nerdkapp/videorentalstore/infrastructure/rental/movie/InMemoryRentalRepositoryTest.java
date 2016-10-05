@@ -1,11 +1,12 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
-import com.nerdkapp.videorentalstore.domain.RentedMovies;
+import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.infrastructure.rental.InMemoryRentalRepository;
 import org.junit.Before;
 import org.junit.Test;
 

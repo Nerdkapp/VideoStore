@@ -1,4 +1,4 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental;
+package com.nerdkapp.videorentalstore.infrastructure;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

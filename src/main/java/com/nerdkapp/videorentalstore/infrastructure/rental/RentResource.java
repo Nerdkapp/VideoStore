@@ -1,7 +1,7 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.Price;
-import com.nerdkapp.videorentalstore.domain.RentalShop;
+import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

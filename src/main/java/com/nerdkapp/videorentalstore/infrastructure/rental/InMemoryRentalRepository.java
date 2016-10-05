@@ -1,8 +1,8 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
+package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
-import com.nerdkapp.videorentalstore.domain.RentalRepository;
-import com.nerdkapp.videorentalstore.domain.RentedMovies;
+import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
+import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;

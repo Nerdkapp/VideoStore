@@ -1,4 +1,6 @@
-package com.nerdkapp.videorentalstore.domain;
+package com.nerdkapp.videorentalstore.domain.rental;
+
+import com.nerdkapp.videorentalstore.domain.Price;
 
 import java.util.List;
 import java.util.UUID;
