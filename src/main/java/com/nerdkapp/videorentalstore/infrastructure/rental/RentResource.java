@@ -45,13 +45,13 @@ public class RentResource
     return new RentalResponse(rentalReceipt.getRentalId(), rentalReceipt.getPrice().getAmount(), rentalReceipt.getPrice().getCurrency());
   }
 
-  @RequestMapping(value = "/{userId}/{rentalId}/{returnDate}", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{userId}/{rentalId}/", method = RequestMethod.PUT)
   public ReturnMoviesResponse returnMovies(
       @PathVariable("userId") String userId,
       @PathVariable UUID rentalId,
-      @PathVariable Date returnDate){
+      @RequestBody ReturnMoviesRequest returnMoviesRequest){
     LOGGER.info("User {} returned rented movies for rental id: {}", userId, rentalId);
-    Price price = rentalShop.returnMovies(rentalId, returnDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+    Price price = rentalShop.returnMovies(rentalId, returnMoviesRequest.getReturnDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
 
     return new ReturnMoviesResponse(price.getAmount(), price.getCurrency());
   }
@@ -177,6 +177,24 @@ public class RentResource
       sb.append("rentalId=").append(rentalId);
       sb.append('}');
       return sb.toString();
+    }
+  }
+
+  public static class ReturnMoviesRequest{
+    private Date returnDate;
+
+    public ReturnMoviesRequest()
+    {
+    }
+
+    public ReturnMoviesRequest(Date returnDate)
+    {
+      this.returnDate = returnDate;
+    }
+
+    public Date getReturnDate()
+    {
+      return returnDate;
     }
   }
 

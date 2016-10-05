@@ -65,7 +65,7 @@ public class RentResourceTest
       will(returnValue(price));
     }});
 
-    RentResource.ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, tomorrowAsDate());
+    RentResource.ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, new RentResource.ReturnMoviesRequest(tomorrowAsDate()));
     assertEquals(new BigDecimal("100.00"), rentalResponse.getAmountToPay());
     assertEquals(Currency.getInstance("SEK"), rentalResponse.getCurrency());
   }
