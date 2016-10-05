@@ -7,7 +7,7 @@ import java.util.List;
 public class RentalRequest
 {
   @NotNull
-  private List<MovieRequest> movies;
+  private List<Movie> movies;
   @NotNull
   private Date startRentalDate;
   @NotNull
@@ -17,19 +17,19 @@ public class RentalRequest
   {
   }
 
-  public RentalRequest(List<MovieRequest> movies, Date startRentalDate, Date endRentalDate)
+  public RentalRequest(List<Movie> movies, Date startRentalDate, Date endRentalDate)
   {
     this.movies = movies;
     this.startRentalDate = startRentalDate;
     this.endRentalDate = endRentalDate;
   }
 
-  public List<MovieRequest> getMovies()
+  public List<Movie> getMovies()
   {
     return movies;
   }
 
-  public void setMovies(List<MovieRequest> movies)
+  public void setMovies(List<Movie> movies)
   {
     this.movies = movies;
   }

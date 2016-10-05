@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class DefaultRentalShop implements RentalShop
 {
   private final Currency currency;
-
   private RentalRepository rentalRepository;
 
   @Autowired
@@ -44,9 +43,8 @@ public class DefaultRentalShop implements RentalShop
   {
     List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
     UUID rentalId = rentalRepository.rentMovies(movies, endRentalDate);
-    Price price = calculateExpectedPrice(movies, startRentalDate, endRentalDate);
 
-    return new RentalReceipt(rentalId, price);
+    return new RentalReceipt(rentalId, calculateExpectedPrice(movies, startRentalDate, endRentalDate));
   }
 
   @Override

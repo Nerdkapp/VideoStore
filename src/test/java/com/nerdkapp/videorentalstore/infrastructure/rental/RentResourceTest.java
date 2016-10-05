@@ -87,7 +87,7 @@ public class RentResourceTest
   {
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-    List<MovieRequest> movies = Arrays.asList(new MovieRequest("Matrix"));
+    List<Movie> movies = Arrays.asList(new Movie("Matrix"));
     return new RentalRequest(movies,
         dateFormat.parse("2016/10/20"),
         dateFormat.parse("2016/10/22"));

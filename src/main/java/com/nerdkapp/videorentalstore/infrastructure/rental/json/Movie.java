@@ -2,16 +2,16 @@ package com.nerdkapp.videorentalstore.infrastructure.rental.json;
 
 import javax.validation.constraints.NotNull;
 
-public class MovieRequest
+public class Movie
 {
   @NotNull
   private String title;
 
-  public MovieRequest()
+  public Movie()
   {
   }
 
-  public MovieRequest(String title)
+  public Movie(String title)
   {
     this.title = title;
   }

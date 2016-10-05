@@ -34,7 +34,10 @@ public class RentResource
   }
 
   @RequestMapping(value = "/{userId}", method = RequestMethod.POST)
-  public RentalResponse rent(@PathVariable("userId") String userId, @RequestBody RentalRequest rentalRequest){
+  public RentalResponse rent(
+      @PathVariable("userId") String userId,
+      @RequestBody RentalRequest rentalRequest){
+
     LOGGER.info("User {} asked to rent {}", userId, rentalRequest);
 
     List<String> moviesToRent = rentalRequest.getMovies().stream().
@@ -44,6 +47,8 @@ public class RentResource
     RentalReceipt rentalReceipt = rentalShop.rent(moviesToRent,
         convertToLocalDate(rentalRequest.getStartRentalDate()),
         convertToLocalDate(rentalRequest.getEndRentalDate()));
+
+    LOGGER.info("Rental receipt: {}", rentalReceipt);
 
     return new RentalResponse(rentalReceipt.getRentalId(), rentalReceipt.getPrice().getAmount(), rentalReceipt.getPrice().getCurrency());
   }
@@ -55,6 +60,8 @@ public class RentResource
       @RequestBody ReturnMoviesRequest returnMoviesRequest){
     LOGGER.info("User {} returned rented movies for rental id: {}", userId, rentalId);
     Price price = rentalShop.returnMovies(rentalId, convertToLocalDate(returnMoviesRequest.getReturnDate()));
+
+    LOGGER.info("Price: {}", price);
 
     return new ReturnMoviesResponse(price.getAmount(), price.getCurrency());
   }
