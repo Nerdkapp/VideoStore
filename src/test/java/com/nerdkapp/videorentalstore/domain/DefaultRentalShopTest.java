@@ -6,6 +6,7 @@ import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
 import com.nerdkapp.videorentalstore.domain.rental.Rental;
+import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import com.nerdkapp.videorentalstore.infrastructure.rental.DefaultRentalShop;
@@ -17,6 +18,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.UUID;
@@ -80,6 +82,7 @@ public class DefaultRentalShopTest
     Movie movieFoundOnRepo = new Movie(movie, new RegularMoviePricing());
 
     UUID rentalId = UUID.randomUUID();
+    Price expectedPrice = new Price(new BigDecimal("30.00"), Currency.getInstance("SEK"));
 
     context.checking(new Expectations(){{
       oneOf(rentalRepository).findMovie(movie);
@@ -88,9 +91,21 @@ public class DefaultRentalShopTest
       will(returnValue(rentalId));
     }});
 
-    UUID customerRentalId = rentalShop.rent(Arrays.asList(movie));
-    assertEquals(rentalId, customerRentalId);
+    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    assertEquals(rentalId, receipt.getRentalId());
+    assertEquals(expectedPrice, receipt.getPrice());
   }
+
+  private LocalDate tomorrow()
+  {
+    return LocalDate.now().plus(1L, ChronoUnit.DAYS);
+  }
+
+  private LocalDate today()
+  {
+    return LocalDate.now();
+  }
+
 
   @Test(expected = MovieNotFoundException.class)
   public void throw_expection_when_movie_is_not_found() throws Exception
@@ -107,8 +122,8 @@ public class DefaultRentalShopTest
       will(throwException(new MovieNotFoundException()));
     }});
 
-    UUID customerRentalId = rentalShop.rent(Arrays.asList(movie));
-    assertEquals(rentalId, customerRentalId);
+    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    assertEquals(rentalId, receipt.getRentalId());
   }
 
   @Test

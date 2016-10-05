@@ -1,6 +1,7 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.Price;
+import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +37,9 @@ public class RentResource
         map(r -> r.getTitle()).
         collect(Collectors.toList());
 
-    UUID rentalId = rentalShop.rent(moviesToRent);
+    RentalReceipt rentalReceipt = rentalShop.rent(moviesToRent, rentalRequest.getStartRentalDate(), rentalRequest.getEndRentalData());
 
-    return new RentalResponse(rentalId);
+    return new RentalResponse(rentalReceipt.getRentalId(), rentalReceipt.getPrice().getAmount(), rentalReceipt.getPrice().getCurrency());
   }
 
   @RequestMapping(value = "/{userId}/{rentalId}", method = RequestMethod.PUT)
@@ -51,14 +53,18 @@ public class RentResource
   public static class RentalRequest
   {
     private List<MovieRequest> movies;
+    private LocalDate startRentalDate;
+    private LocalDate endRentalData;
 
     public RentalRequest()
     {
     }
 
-    public RentalRequest(List<MovieRequest> movies)
+    public RentalRequest(List<MovieRequest> movies, LocalDate startRentalDate, LocalDate endRentalData)
     {
       this.movies = movies;
+      this.startRentalDate = startRentalDate;
+      this.endRentalData = endRentalData;
     }
 
     public List<MovieRequest> getMovies()
@@ -69,6 +75,16 @@ public class RentResource
     public void setMovies(List<MovieRequest> movies)
     {
       this.movies = movies;
+    }
+
+    public LocalDate getStartRentalDate()
+    {
+      return startRentalDate;
+    }
+
+    public LocalDate getEndRentalData()
+    {
+      return endRentalData;
     }
 
     @Override
@@ -117,19 +133,33 @@ public class RentResource
   public static class RentalResponse
   {
     private UUID rentalId;
+    private BigDecimal amountToPay;
+    private Currency currency;
 
     public RentalResponse()
     {
     }
 
-    public RentalResponse(UUID rentalId)
+    public RentalResponse(UUID rentalId, BigDecimal amountToPay, Currency currency)
     {
       this.rentalId = rentalId;
+      this.amountToPay = amountToPay;
+      this.currency = currency;
     }
 
     public UUID getRentalId()
     {
       return rentalId;
+    }
+
+    public BigDecimal getAmountToPay()
+    {
+      return amountToPay;
+    }
+
+    public Currency getCurrency()
+    {
+      return currency;
     }
 
     @Override

@@ -4,12 +4,14 @@ import com.nerdkapp.videorentalstore.domain.*;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.rental.Rental;
+import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Currency;
@@ -45,12 +47,20 @@ public class DefaultRentalShop implements RentalShop
     return calculateExpectedPrice(Arrays.asList(rental));
   }
 
+  private Price calculateExpectedPrice(List<Movie> rentals, LocalDate startDate, LocalDate endDate)
+  {
+    int daysOfRental = (int) ChronoUnit.DAYS.between(startDate, endDate);
+    return new Price(rentals.stream().map(rental -> rental.getPricingModel().calculatePrice(daysOfRental)).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
+  }
 
   @Override
-  public UUID rent(List<String> moviesToRent)
+  public RentalReceipt rent(List<String> moviesToRent, LocalDate startRentalDate, LocalDate endRentalDate)
   {
     List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
-    return rentalRepository.rentMovies(movies);
+    UUID rentalId = rentalRepository.rentMovies(movies);
+    Price price = calculateExpectedPrice(movies, startRentalDate, endRentalDate);
+
+    return new RentalReceipt(rentalId, price);
   }
 
   @Override
