@@ -1,6 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
-import com.nerdkapp.videorentalstore.domain.RentalNotFoundException;
+import com.nerdkapp.videorentalstore.domain.rental.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;

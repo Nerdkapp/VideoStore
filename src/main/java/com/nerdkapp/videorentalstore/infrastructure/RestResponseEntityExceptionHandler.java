@@ -1,6 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure;
 
-import com.nerdkapp.videorentalstore.domain.RentalNotFoundException;
+import com.nerdkapp.videorentalstore.domain.rental.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
