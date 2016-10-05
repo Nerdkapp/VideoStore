@@ -68,4 +68,10 @@ public class InMemoryRentalRepository implements RentalRepository
     rentedMovies.put(id, new RentedMovies(id, movies, LocalDate.now(), expectedReturnDate));
     return id;
   }
+
+  @Override
+  public void closeRental(UUID rentalId)
+  {
+    rentedMovies.remove(rentalId);
+  }
 }

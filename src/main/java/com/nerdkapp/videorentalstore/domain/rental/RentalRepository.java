@@ -12,4 +12,5 @@ public interface RentalRepository
   RentedMovies retrieveRentedMovies(UUID rentalId);
   Movie findMovie(String movie);
   UUID rentMovies(List<Movie> movies, LocalDate expectedReturnDate);
+  void closeRental(UUID rentalId);
 }

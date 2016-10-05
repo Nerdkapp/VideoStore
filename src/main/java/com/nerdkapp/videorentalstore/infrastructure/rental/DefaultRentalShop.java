@@ -61,6 +61,8 @@ public class DefaultRentalShop implements RentalShop
       for(Movie movie : rentedMovies.getMovies())
         amountToPay = amountToPay.add(movie.getPricingModel().calculatePrice(additionalDaysOfRental));
 
+    rentalRepository.closeRental(rentalId);
+
     return new Price(amountToPay, currency);
   }
 }

@@ -143,6 +143,7 @@ public class DefaultRentalShopTest
     context.checking(new Expectations(){{
       oneOf(rentalRepository).retrieveRentedMovies(rentalId);
         will(returnValue(rentedMovies));
+      oneOf(rentalRepository).closeRental(rentalId);
     }});
 
     Price price = rentalShop.returnMovies(rentalId, tomorrow());
@@ -162,6 +163,7 @@ public class DefaultRentalShopTest
     context.checking(new Expectations(){{
         oneOf(rentalRepository).retrieveRentedMovies(rentalId);
       will(returnValue(rentedMovies));
+      oneOf(rentalRepository).closeRental(rentalId);
     }});
 
     Price price = rentalShop.returnMovies(rentalId, tomorrow());

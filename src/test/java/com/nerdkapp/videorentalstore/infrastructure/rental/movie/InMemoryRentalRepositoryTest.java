@@ -73,6 +73,16 @@ public class InMemoryRentalRepositoryTest
     repository.retrieveRentedMovies(UUID.randomUUID());
   }
 
+  @Test(expected = RentalNotFoundException.class)
+  public void close_rental() throws Exception
+  {
+    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
+
+    UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
+    repository.closeRental(rentalId);
+    repository.retrieveRentedMovies(rentalId);
+  }
+
   private LocalDate tomorrow()
   {
     return LocalDate.now().plus(1L, ChronoUnit.DAYS);
