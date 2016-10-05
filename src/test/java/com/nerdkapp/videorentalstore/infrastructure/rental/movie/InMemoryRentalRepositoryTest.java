@@ -1,5 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
+import com.nerdkapp.videorentalstore.domain.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
@@ -41,12 +42,6 @@ public class InMemoryRentalRepositoryTest
     assertEquals(new RegularMoviePricing(), movie.getPricingModel());
   }
 
-  @Test(expected = MovieNotFoundException.class)
-  public void movie_not_found() throws Exception
-  {
-    repository.findMovie("Not existent movie");
-  }
-
   @Test
   public void rent_a_movie() throws Exception
   {
@@ -64,6 +59,18 @@ public class InMemoryRentalRepositoryTest
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     RentedMovies retrievedMovies = repository.retrieveRentedMovies(rentalId);
     assertEquals(moviesToRent, retrievedMovies.getMovies());
+  }
+
+  @Test(expected = MovieNotFoundException.class)
+  public void movie_not_found() throws Exception
+  {
+    repository.findMovie("Not existent movie");
+  }
+
+  @Test(expected = RentalNotFoundException.class)
+  public void rental_not_found() throws Exception
+  {
+    repository.retrieveRentedMovies(UUID.randomUUID());
   }
 
   private LocalDate tomorrow()

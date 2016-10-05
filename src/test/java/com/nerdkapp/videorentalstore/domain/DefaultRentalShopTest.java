@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Currency;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -34,47 +35,39 @@ public class DefaultRentalShopTest
 
   Currency SEK = Currency.getInstance("SEK");
 
-  @Test
-  public void calculate_price_for_a_premium_movie() throws Exception
+  private LocalDate tomorrow()
   {
-    Movie movie = new Movie("Matrix", new PremiumMoviePricing());
-    int numberOfDays = 1;
+    return LocalDate.now().plus(1L, ChronoUnit.DAYS);
+  }
 
-    Price price = rentalShop.calculateExpectedPrice(new Rental(movie, numberOfDays));
-
-    Price expectedPrice = new Price( new BigDecimal("40.00"), Currency.getInstance("SEK"));
-
-    assertEquals(expectedPrice, price);
+  private LocalDate today()
+  {
+    return LocalDate.now();
   }
 
   @Test
-  public void calculate_price_for_a_regular_movie() throws Exception
+  public void rent_a_premium_movie() throws Exception
   {
-    Movie movie = new Movie("Matrix", new RegularMoviePricing());
-    int numberOfDays = 5;
+    String movie = "Spiderman";
+    Movie movieFoundOnRepo = new Movie(movie, new PremiumMoviePricing());
 
-    Price price = rentalShop.calculateExpectedPrice(new Rental(movie, numberOfDays));
+    UUID rentalId = UUID.randomUUID();
+    Price expectedPrice = new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
 
-    Price expectedPrice = new Price( new BigDecimal("90.00"), Currency.getInstance("SEK"));
+    context.checking(new Expectations(){{
+      oneOf(rentalRepository).findMovie(movie);
+      will(returnValue(movieFoundOnRepo));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo), tomorrow());
+      will(returnValue(rentalId));
+    }});
 
-    assertEquals(expectedPrice, price);
+    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    assertEquals(rentalId, receipt.getRentalId());
+    assertEquals(expectedPrice, receipt.getPrice());
   }
 
   @Test
-  public void calculate_price_for_multiple_movies() throws Exception
-  {
-    Rental firstRental = new Rental(new Movie("Matrix", new PremiumMoviePricing()), 1);
-    Rental secondRental = new Rental(new Movie("Spiderman 100", new RegularMoviePricing()), 5);
-
-    Price price = rentalShop.calculateExpectedPrice(Arrays.asList(firstRental, secondRental));
-
-    Price expectedPrice = new Price( new BigDecimal("130.00"), Currency.getInstance("SEK"));
-
-    assertEquals(expectedPrice, price);
-  }
-
-  @Test
-  public void rent_a_movie() throws Exception
+  public void rent_a_regular_movie() throws Exception
   {
     String movie = "Spiderman";
     Movie movieFoundOnRepo = new Movie(movie, new RegularMoviePricing());
@@ -94,16 +87,30 @@ public class DefaultRentalShopTest
     assertEquals(expectedPrice, receipt.getPrice());
   }
 
-  private LocalDate tomorrow()
+  @Test
+  public void calculate_price_for_multiple_movies() throws Exception
   {
-    return LocalDate.now().plus(1L, ChronoUnit.DAYS);
-  }
+    List<String> movies = Arrays.asList("Matrix", "Spiderman 100");
+    Movie firstMovie = new Movie("Matrix", new PremiumMoviePricing());
+    Movie secondMovie = new Movie("Spiderman 100", new RegularMoviePricing());
 
-  private LocalDate today()
-  {
-    return LocalDate.now();
-  }
+    UUID rentalId = UUID.randomUUID();
 
+    context.checking(new Expectations(){{
+      oneOf(rentalRepository).findMovie("Matrix");
+      will(returnValue(firstMovie));
+      oneOf(rentalRepository).findMovie("Spiderman 100");
+      will(returnValue(secondMovie));
+      oneOf(rentalRepository).rentMovies(Arrays.asList(firstMovie, secondMovie), tomorrow());
+      will(returnValue(rentalId));
+    }});
+
+    RentalReceipt receipt = rentalShop.rent(movies, today(), tomorrow());
+
+    Price expectedPrice = new Price( new BigDecimal("70.00"), Currency.getInstance("SEK"));
+    assertEquals(expectedPrice, receipt.getPrice());
+    assertEquals(rentalId, receipt.getRentalId());
+  }
 
   @Test(expected = MovieNotFoundException.class)
   public void throw_expection_when_movie_is_not_found() throws Exception
@@ -155,6 +162,20 @@ public class DefaultRentalShopTest
     context.checking(new Expectations(){{
         oneOf(rentalRepository).retrieveRentedMovies(rentalId);
       will(returnValue(rentedMovies));
+    }});
+
+    Price price = rentalShop.returnMovies(rentalId, tomorrow());
+
+    assertEquals(new Price(new BigDecimal("0"), SEK), price);
+  }
+
+  @Test(expected = RentalNotFoundException.class)
+  public void throw_exception_when_rental_is_not_found() throws Exception
+  {
+    UUID rentalId = UUID.randomUUID();
+    context.checking(new Expectations(){{
+      oneOf(rentalRepository).retrieveRentedMovies(rentalId);
+      will(throwException(new RentalNotFoundException()));
     }});
 
     Price price = rentalShop.returnMovies(rentalId, tomorrow());

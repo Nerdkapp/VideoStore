@@ -33,18 +33,6 @@ public class DefaultRentalShop implements RentalShop
     this.currency = currency;
   }
 
-  @Override
-  public Price calculateExpectedPrice(List<Rental> rentals)
-  {
-    return new Price(rentals.stream().map(rental -> rental.calculate()).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
-  }
-
-  @Override
-  public Price calculateExpectedPrice(Rental rental)
-  {
-    return calculateExpectedPrice(Arrays.asList(rental));
-  }
-
   private Price calculateExpectedPrice(List<Movie> rentals, LocalDate startDate, LocalDate endDate)
   {
     int daysOfRental = (int) ChronoUnit.DAYS.between(startDate, endDate);

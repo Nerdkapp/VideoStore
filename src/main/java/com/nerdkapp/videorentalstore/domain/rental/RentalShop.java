@@ -8,11 +8,6 @@ import java.util.UUID;
 
 public interface RentalShop
 {
-  Price calculateExpectedPrice(List<Rental> rentals);
-
-  Price calculateExpectedPrice(Rental rental);
-
   Price returnMovies(UUID rentalId, LocalDate localDate);
-
   RentalReceipt rent(List<String> movies, LocalDate startRentalDate, LocalDate endRentalData);
 }

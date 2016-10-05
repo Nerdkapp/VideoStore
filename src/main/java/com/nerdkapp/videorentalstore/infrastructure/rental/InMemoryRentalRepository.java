@@ -1,5 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
+import com.nerdkapp.videorentalstore.domain.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
@@ -41,7 +42,12 @@ public class InMemoryRentalRepository implements RentalRepository
   @Override
   public RentedMovies retrieveRentedMovies(UUID rentalId)
   {
-    return rentedMovies.get(rentalId);
+    RentedMovies rental = rentedMovies.get(rentalId);
+
+    if(rental == null)
+      throw new RentalNotFoundException();
+
+    return rental;
   }
 
   @Override
