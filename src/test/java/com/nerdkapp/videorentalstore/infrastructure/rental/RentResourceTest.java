@@ -3,6 +3,7 @@ package com.nerdkapp.videorentalstore.infrastructure.rental;
 import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
+import com.nerdkapp.videorentalstore.infrastructure.rental.json.*;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -31,7 +32,7 @@ public class RentResourceTest
   @Test
   public void rent_a_movie() throws Exception
   {
-    RentResource.RentalRequest rentalRequest = aRentalRequest();
+    RentalRequest rentalRequest = aRentalRequest();
     List<String> moviesList = rentalRequest.getMovies().stream().
                               map(r -> r.getTitle()).
                               collect(Collectors.toList());
@@ -47,7 +48,7 @@ public class RentResourceTest
       will(returnValue(new RentalReceipt(rentalId, price)));
     }});
 
-    RentResource.RentalResponse rentalResponse = rentResource.rent("lcoccia", rentalRequest);
+    RentalResponse rentalResponse = rentResource.rent("lcoccia", rentalRequest);
 
     assertEquals(rentalId, rentalResponse.getRentalId());
     assertEquals(price.getAmount(), rentalResponse.getAmountToPay());
@@ -65,7 +66,7 @@ public class RentResourceTest
       will(returnValue(price));
     }});
 
-    RentResource.ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, new RentResource.ReturnMoviesRequest(tomorrowAsDate()));
+    ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, new ReturnMoviesRequest(tomorrowAsDate()));
     assertEquals(new BigDecimal("100.00"), rentalResponse.getAmountToPay());
     assertEquals(Currency.getInstance("SEK"), rentalResponse.getCurrency());
   }
@@ -82,12 +83,12 @@ public class RentResourceTest
     return c.getTime();
   }
 
-  private RentResource.RentalRequest aRentalRequest() throws ParseException
+  private RentalRequest aRentalRequest() throws ParseException
   {
     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
-    List<RentResource.MovieRequest> movies = Arrays.asList(new RentResource.MovieRequest("Matrix"));
-    return new RentResource.RentalRequest(movies,
+    List<MovieRequest> movies = Arrays.asList(new MovieRequest("Matrix"));
+    return new RentalRequest(movies,
         dateFormat.parse("2016/10/20"),
         dateFormat.parse("2016/10/22"));
   }
