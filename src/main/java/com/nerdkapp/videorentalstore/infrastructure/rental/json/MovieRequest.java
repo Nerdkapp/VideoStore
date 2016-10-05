@@ -1,7 +1,10 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental.json;
 
+import javax.validation.constraints.NotNull;
+
 public class MovieRequest
 {
+  @NotNull
   private String title;
 
   public MovieRequest()
