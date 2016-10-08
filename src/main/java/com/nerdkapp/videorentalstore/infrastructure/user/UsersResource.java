@@ -1,12 +1,8 @@
 package com.nerdkapp.videorentalstore.infrastructure.user;
 
-import com.nerdkapp.videorentalstore.domain.UserRepository;
-import com.nerdkapp.videorentalstore.infrastructure.rental.json.ReturnMoviesRequest;
-import com.nerdkapp.videorentalstore.infrastructure.rental.json.ReturnMoviesResponse;
+import com.nerdkapp.videorentalstore.domain.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/users")

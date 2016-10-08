@@ -1,5 +1,6 @@
-package com.nerdkapp.videorentalstore.domain;
+package com.nerdkapp.videorentalstore.domain.rental;
 
+import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 
 import java.time.LocalDate;

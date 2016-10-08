@@ -2,13 +2,14 @@ package com.nerdkapp.videorentalstore.infrastructure.rental;
 
 import com.nerdkapp.videorentalstore.domain.*;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
+import com.nerdkapp.videorentalstore.domain.movies.MoviesRepository;
 import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
+import com.nerdkapp.videorentalstore.domain.rental.RentalService;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Currency;

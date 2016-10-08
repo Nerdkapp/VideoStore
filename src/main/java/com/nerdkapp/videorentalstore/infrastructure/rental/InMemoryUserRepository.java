@@ -1,6 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure.rental;
 
-import com.nerdkapp.videorentalstore.domain.UserRepository;
+import com.nerdkapp.videorentalstore.domain.user.UserRepository;
 
 import java.util.Map;
 

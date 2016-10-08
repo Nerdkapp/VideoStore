@@ -1,6 +1,6 @@
 package com.nerdkapp.videorentalstore.infrastructure.user;
 
-import com.nerdkapp.videorentalstore.domain.UserRepository;
+import com.nerdkapp.videorentalstore.domain.user.UserRepository;
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
