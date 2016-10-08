@@ -6,6 +6,22 @@ public class OldMoviePricing implements PricingModel
 {
   BigDecimal basicPrice = new BigDecimal("30.00");
 
+
+  @Override
+  public BigDecimal calculatePrice(Integer daysOfRental)
+  {
+    if(daysOfRental > 5)
+      return basicPrice.add(basicPrice.multiply(new BigDecimal(daysOfRental - 5)));
+    else
+      return basicPrice;
+  }
+
+  @Override
+  public Integer getBonusPointsForRental()
+  {
+    return 1;
+  }
+
   @Override
   public boolean equals(Object o)
   {
@@ -30,12 +46,4 @@ public class OldMoviePricing implements PricingModel
     return basicPrice != null ? basicPrice.hashCode() : 0;
   }
 
-  @Override
-  public BigDecimal calculatePrice(Integer daysOfRental)
-  {
-    if(daysOfRental > 5)
-      return basicPrice.add(basicPrice.multiply(new BigDecimal(daysOfRental - 5)));
-    else
-      return basicPrice;
-  }
 }

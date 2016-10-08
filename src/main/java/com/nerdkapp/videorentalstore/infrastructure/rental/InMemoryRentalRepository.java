@@ -51,7 +51,7 @@ public class InMemoryRentalRepository implements RentalRepository
   }
 
   @Override
-  public Movie findMovie(String movie)
+  public Movie findMovies(String movie)
   {
     Movie movieFound = movies.get(movie);
 

@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface RentalRepository
 {
   RentedMovies retrieveRentedMovies(UUID rentalId);
-  Movie findMovie(String movie);
+  Movie findMovies(String movie);
   UUID rentMovies(List<Movie> movies, LocalDate expectedReturnDate);
   void closeRental(UUID rentalId);
 }

@@ -36,7 +36,7 @@ public class InMemoryRentalRepositoryTest
   @Test
   public void find_a_movie() throws Exception
   {
-    Movie movie = repository.findMovie("Spiderman");
+    Movie movie = repository.findMovies("Spiderman");
 
     assertEquals("Spiderman", movie.getTitle());
     assertEquals(new RegularMoviePricing(), movie.getPricingModel());
@@ -64,7 +64,7 @@ public class InMemoryRentalRepositoryTest
   @Test(expected = MovieNotFoundException.class)
   public void movie_not_found() throws Exception
   {
-    repository.findMovie("Not existent movie");
+    repository.findMovies("Not existent movie");
   }
 
   @Test(expected = RentalNotFoundException.class)

@@ -7,6 +7,21 @@ public class PremiumMoviePricing implements PricingModel
   BigDecimal premiumPrice = new BigDecimal("40.00");
 
   @Override
+  public BigDecimal calculatePrice(Integer daysOfRental)
+  {
+    if(daysOfRental > 1)
+      return premiumPrice.multiply(new BigDecimal(daysOfRental));
+    else
+      return premiumPrice;
+  }
+
+  @Override
+  public Integer getBonusPointsForRental()
+  {
+    return 2;
+  }
+
+  @Override
   public boolean equals(Object o)
   {
     if (this == o)
@@ -28,14 +43,5 @@ public class PremiumMoviePricing implements PricingModel
   public int hashCode()
   {
     return premiumPrice != null ? premiumPrice.hashCode() : 0;
-  }
-
-  @Override
-  public BigDecimal calculatePrice(Integer daysOfRental)
-  {
-    if(daysOfRental > 1)
-      return premiumPrice.multiply(new BigDecimal(daysOfRental));
-    else
-      return premiumPrice;
   }
 }

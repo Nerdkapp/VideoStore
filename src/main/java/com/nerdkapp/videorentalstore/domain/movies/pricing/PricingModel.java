@@ -5,4 +5,6 @@ import java.math.BigDecimal;
 public interface PricingModel
 {
   public BigDecimal calculatePrice(Integer daysOfRental);
+
+  Integer getBonusPointsForRental();
 }
