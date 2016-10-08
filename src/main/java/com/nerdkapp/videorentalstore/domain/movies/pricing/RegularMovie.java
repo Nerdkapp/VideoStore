@@ -2,7 +2,7 @@ package com.nerdkapp.videorentalstore.domain.movies.pricing;
 
 import java.math.BigDecimal;
 
-public class RegularMoviePricing implements PricingModel
+public class RegularMovie implements MovieType
 {
   BigDecimal basicPrice = new BigDecimal("30.00");
 
@@ -33,7 +33,7 @@ public class RegularMoviePricing implements PricingModel
       return false;
     }
 
-    RegularMoviePricing that = (RegularMoviePricing) o;
+    RegularMovie that = (RegularMovie) o;
 
     return basicPrice != null ? basicPrice.equals(that.basicPrice) : that.basicPrice == null;
 

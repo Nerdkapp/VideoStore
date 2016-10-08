@@ -3,7 +3,7 @@ package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 import com.nerdkapp.videorentalstore.domain.rental.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.rental.RentedMovies;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMovie;
 import com.nerdkapp.videorentalstore.infrastructure.rental.InMemoryRentalRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class InMemoryRentalRepositoryTest
   @Test
   public void rent_a_movie() throws Exception
   {
-    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
+    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMovie()));
 
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     assertNotNull(rentalId);
@@ -37,7 +37,7 @@ public class InMemoryRentalRepositoryTest
   @Test
   public void retrieve_rented_movies() throws Exception
   {
-    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
+    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMovie()));
 
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     RentedMovies retrievedMovies = repository.findRental(rentalId);
@@ -53,7 +53,7 @@ public class InMemoryRentalRepositoryTest
   @Test(expected = RentalNotFoundException.class)
   public void close_rental() throws Exception
   {
-    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
+    List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMovie()));
 
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     repository.closeRental(rentalId);

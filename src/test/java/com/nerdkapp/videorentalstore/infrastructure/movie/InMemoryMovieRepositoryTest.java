@@ -3,9 +3,9 @@ package com.nerdkapp.videorentalstore.infrastructure.movie;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.MoviesRepository;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMovie;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMovie;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMovie;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,10 +24,10 @@ public class InMemoryMovieRepositoryTest
   public void setUp() throws Exception
   {
     Map<String, Movie> movieDB = new HashMap<>();
-    movieDB.put("Matrix 11", new Movie("Matrix 11", new PremiumMoviePricing()));
-    movieDB.put("Spiderman", new Movie("Spiderman", new RegularMoviePricing()));
-    movieDB.put("Spiderman 2", new Movie("Spiderman 2", new RegularMoviePricing()));
-    movieDB.put("Out of Africa", new Movie("Out of Africa", new OldMoviePricing()));
+    movieDB.put("Matrix 11", new Movie("Matrix 11", new PremiumMovie()));
+    movieDB.put("Spiderman", new Movie("Spiderman", new RegularMovie()));
+    movieDB.put("Spiderman 2", new Movie("Spiderman 2", new RegularMovie()));
+    movieDB.put("Out of Africa", new Movie("Out of Africa", new OldMovie()));
     repository = new InMemoryMovieRepository(movieDB);
   }
 
@@ -37,7 +37,7 @@ public class InMemoryMovieRepositoryTest
     List<Movie> movie = repository.findMovies(Arrays.asList("Spiderman"));
 
     assertEquals("Spiderman", movie.get(0).getTitle());
-    assertEquals(new RegularMoviePricing(), movie.get(0).getPricingModel());
+    assertEquals(new RegularMovie(), movie.get(0).getMovieType());
   }
 
   @Test(expected = MovieNotFoundException.class)

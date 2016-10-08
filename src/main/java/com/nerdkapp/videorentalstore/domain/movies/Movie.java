@@ -1,17 +1,17 @@
 package com.nerdkapp.videorentalstore.domain.movies;
 
-import com.nerdkapp.videorentalstore.domain.movies.pricing.PricingModel;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.MovieType;
 
 public class Movie
 {
   private final String title;
 
-  private final PricingModel pricingModel;
+  private final MovieType movieType;
 
-  public Movie(String title, PricingModel pricingModel)
+  public Movie(String title, MovieType movieType)
   {
     this.title = title;
-    this.pricingModel = pricingModel;
+    this.movieType = movieType;
   }
 
   public String getTitle()
@@ -19,7 +19,7 @@ public class Movie
     return title;
   }
 
-  public PricingModel getPricingModel(){ return pricingModel; }
+  public MovieType getMovieType(){ return movieType; }
 
   @Override
   public boolean equals(Object o)
@@ -39,7 +39,7 @@ public class Movie
     {
       return false;
     }
-    return pricingModel != null ? pricingModel.equals(movie.pricingModel) : movie.pricingModel == null;
+    return movieType != null ? movieType.equals(movie.movieType) : movie.movieType == null;
 
   }
 
@@ -47,7 +47,7 @@ public class Movie
   public int hashCode()
   {
     int result = title != null ? title.hashCode() : 0;
-    result = 31 * result + (pricingModel != null ? pricingModel.hashCode() : 0);
+    result = 31 * result + (movieType != null ? movieType.hashCode() : 0);
     return result;
   }
 
@@ -56,7 +56,7 @@ public class Movie
   {
     final StringBuffer sb = new StringBuffer("Movie{");
     sb.append("title='").append(title).append('\'');
-    sb.append(", pricingModel=").append(pricingModel);
+    sb.append(", pricingModel=").append(movieType);
     sb.append('}');
     return sb.toString();
   }

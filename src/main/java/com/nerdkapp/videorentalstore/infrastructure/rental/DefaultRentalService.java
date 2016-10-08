@@ -38,13 +38,13 @@ public class DefaultRentalService implements RentalService
   @Override
   public Price calculateRentalPrice(List<Movie> moviesFoundOnRepo, int daysOfRental)
   {
-    return new Price(moviesFoundOnRepo.stream().map(movie -> movie.getPricingModel().calculatePrice(daysOfRental)).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
+    return new Price(moviesFoundOnRepo.stream().map(movie -> movie.getMovieType().calculatePrice(daysOfRental)).reduce(BigDecimal.ZERO, BigDecimal::add), currency);
   }
 
   @Override
   public Integer calculateBonusPoints(List<Movie> movies)
   {
-    return movies.stream().map(movie -> movie.getPricingModel().getBonusPointsForRental()).reduce(0, Integer::sum);
+    return movies.stream().map(movie -> movie.getMovieType().getBonusPointsForRental()).reduce(0, Integer::sum);
   }
 
   @Override

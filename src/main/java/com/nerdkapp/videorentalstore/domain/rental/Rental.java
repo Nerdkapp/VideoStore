@@ -17,6 +17,6 @@ public class Rental
 
   public BigDecimal calculate()
   {
-    return movie.getPricingModel().calculatePrice(daysOfRental);
+    return movie.getMovieType().calculatePrice(daysOfRental);
   }
 }

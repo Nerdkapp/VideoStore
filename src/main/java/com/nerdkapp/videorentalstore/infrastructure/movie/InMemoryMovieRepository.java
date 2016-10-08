@@ -3,9 +3,9 @@ package com.nerdkapp.videorentalstore.infrastructure.movie;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.MoviesRepository;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMovie;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMovie;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMovie;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,10 +22,10 @@ public class InMemoryMovieRepository implements MoviesRepository
   public InMemoryMovieRepository()
   {
     moviesDB = new HashMap<>();
-    moviesDB.put("Matrix 11", new Movie("Matrix 11", new PremiumMoviePricing()));
-    moviesDB.put("Spiderman", new Movie("Spiderman", new RegularMoviePricing()));
-    moviesDB.put("Spiderman 2", new Movie("Spiderman 2", new RegularMoviePricing()));
-    moviesDB.put("Out of Africa", new Movie("Out of Africa", new OldMoviePricing()));
+    moviesDB.put("Matrix 11", new Movie("Matrix 11", MovieTypeFactory.premiumMovie()));
+    moviesDB.put("Spiderman", new Movie("Spiderman", MovieTypeFactory.regularMovie()));
+    moviesDB.put("Spiderman 2", new Movie("Spiderman 2", MovieTypeFactory.regularMovie()));
+    moviesDB.put("Out of Africa", new Movie("Out of Africa", MovieTypeFactory.oldMovie()));
   }
 
   public InMemoryMovieRepository(Map<String, Movie> moviesDB)

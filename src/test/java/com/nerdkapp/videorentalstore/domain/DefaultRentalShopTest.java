@@ -3,7 +3,7 @@ package com.nerdkapp.videorentalstore.domain;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.MoviesRepository;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMovie;
 import com.nerdkapp.videorentalstore.domain.rental.*;
 import com.nerdkapp.videorentalstore.infrastructure.rental.DefaultRentalShop;
 import org.jmock.Expectations;
@@ -47,7 +47,7 @@ public class DefaultRentalShopTest
   public void rent_a_movie() throws Exception
   {
     List<String> movies = Arrays.asList("Spiderman");
-    List<Movie> moviesFoundOnRepo = Arrays.asList(new Movie("Spiderman", new PremiumMoviePricing()));
+    List<Movie> moviesFoundOnRepo = Arrays.asList(new Movie("Spiderman", new PremiumMovie()));
     String userId = "an_user";
 
     UUID rentalId = UUID.randomUUID();

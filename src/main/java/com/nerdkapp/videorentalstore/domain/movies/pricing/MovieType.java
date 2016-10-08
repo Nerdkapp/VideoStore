@@ -2,9 +2,9 @@ package com.nerdkapp.videorentalstore.domain.movies.pricing;
 
 import java.math.BigDecimal;
 
-public interface PricingModel
+public interface MovieType
 {
-  public BigDecimal calculatePrice(Integer daysOfRental);
+  BigDecimal calculatePrice(Integer daysOfRental);
 
   Integer getBonusPointsForRental();
 }

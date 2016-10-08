@@ -2,24 +2,23 @@ package com.nerdkapp.videorentalstore.domain.movies.pricing;
 
 import java.math.BigDecimal;
 
-public class OldMoviePricing implements PricingModel
+public class PremiumMovie implements MovieType
 {
-  BigDecimal basicPrice = new BigDecimal("30.00");
-
+  BigDecimal premiumPrice = new BigDecimal("40.00");
 
   @Override
   public BigDecimal calculatePrice(Integer daysOfRental)
   {
-    if(daysOfRental > 5)
-      return basicPrice.add(basicPrice.multiply(new BigDecimal(daysOfRental - 5)));
+    if(daysOfRental > 1)
+      return premiumPrice.multiply(new BigDecimal(daysOfRental));
     else
-      return basicPrice;
+      return premiumPrice;
   }
 
   @Override
   public Integer getBonusPointsForRental()
   {
-    return 1;
+    return 2;
   }
 
   @Override
@@ -34,16 +33,15 @@ public class OldMoviePricing implements PricingModel
       return false;
     }
 
-    OldMoviePricing that = (OldMoviePricing) o;
+    PremiumMovie that = (PremiumMovie) o;
 
-    return basicPrice != null ? basicPrice.equals(that.basicPrice) : that.basicPrice == null;
+    return premiumPrice != null ? premiumPrice.equals(that.premiumPrice) : that.premiumPrice == null;
 
   }
 
   @Override
   public int hashCode()
   {
-    return basicPrice != null ? basicPrice.hashCode() : 0;
+    return premiumPrice != null ? premiumPrice.hashCode() : 0;
   }
-
 }
