@@ -3,7 +3,7 @@ package com.nerdkapp.videorentalstore.infrastructure.rental;
 import com.nerdkapp.videorentalstore.domain.Price;
 import com.nerdkapp.videorentalstore.domain.user.UserRepository;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
-import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
+import com.nerdkapp.videorentalstore.domain.rental.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.rental.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,14 +59,14 @@ public class DefaultRentalService implements RentalService
   @Override
   public Price closeRental(UUID rentalId, LocalDate returnDate)
   {
-    rentalRepository.closeRental(rentalId);
-
-    RentedMovies rentedMovies = rentalRepository.retrieveRentedMovies(rentalId);
+    Price price = NO_PRICE_TO_PAY;
+    RentedMovies rentedMovies = rentalRepository.findRental(rentalId);
 
     int additionalDaysOfRental = (int) ChronoUnit.DAYS.between(rentedMovies.getExpectedReturnDate(), returnDate);
     if(additionalDaysOfRental > 0)
-      return calculateRentalPrice(rentedMovies.getMovies(), additionalDaysOfRental);
+      price = calculateRentalPrice(rentedMovies.getMovies(), additionalDaysOfRental);
 
-    return NO_PRICE_TO_PAY;
+    rentalRepository.closeRental(rentalId);
+    return price;
   }
 }

@@ -30,6 +30,11 @@ public class UsersResource
     {
     }
 
+    public Integer getPoints()
+    {
+      return points;
+    }
+
     public GetBonusPointsResponse(Integer points)
     {
       this.points = points;

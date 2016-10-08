@@ -1,6 +1,5 @@
 package com.nerdkapp.videorentalstore.infrastructure.user;
 
-import com.nerdkapp.videorentalstore.infrastructure.rental.InMemoryUserRepository;
 import org.junit.Test;
 
 import java.util.HashMap;

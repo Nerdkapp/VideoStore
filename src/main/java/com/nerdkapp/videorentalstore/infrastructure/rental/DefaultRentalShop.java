@@ -20,16 +20,13 @@ import java.util.UUID;
 public class DefaultRentalShop implements RentalShop
 {
   private final RentalService rentalService;
-  private final Currency currency;
   private final MoviesRepository moviesRepository;
-  private RentalRepository rentalRepository;
 
   @Autowired
   public DefaultRentalShop(MoviesRepository moviesRepository, RentalService rentalService, Currency currency)
   {
     this.moviesRepository = moviesRepository;
     this.rentalService = rentalService;
-    this.currency = currency;
   }
 
   @Override

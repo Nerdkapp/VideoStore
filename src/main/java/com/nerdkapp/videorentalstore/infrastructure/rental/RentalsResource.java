@@ -54,7 +54,7 @@ public class RentalsResource
     return new RentalResponse(rentalReceipt.getRentalId(), rentalReceipt.getPrice().getAmount(), rentalReceipt.getPrice().getCurrency());
   }
 
-  @RequestMapping(value = "/{userId}/{rentalId}/", method = RequestMethod.PUT)
+  @RequestMapping(value = "/{userId}/{rentalId}", method = RequestMethod.PUT)
   public ReturnMoviesResponse returnMovies(
       @PathVariable("userId") String userId,
       @PathVariable UUID rentalId,

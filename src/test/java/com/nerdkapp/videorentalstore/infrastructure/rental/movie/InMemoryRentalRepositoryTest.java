@@ -2,10 +2,7 @@ package com.nerdkapp.videorentalstore.infrastructure.rental.movie;
 
 import com.nerdkapp.videorentalstore.domain.rental.RentalNotFoundException;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
-import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
-import com.nerdkapp.videorentalstore.domain.movies.MovieNotFoundException;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.OldMoviePricing;
-import com.nerdkapp.videorentalstore.domain.movies.pricing.PremiumMoviePricing;
+import com.nerdkapp.videorentalstore.domain.rental.RentedMovies;
 import com.nerdkapp.videorentalstore.domain.movies.pricing.RegularMoviePricing;
 import com.nerdkapp.videorentalstore.infrastructure.rental.InMemoryRentalRepository;
 import org.junit.Before;
@@ -25,21 +22,7 @@ public class InMemoryRentalRepositoryTest
   @Before
   public void setUp() throws Exception
   {
-    Map<String, Movie> movieDB = new HashMap<>();
-    movieDB.put("Matrix 11", new Movie("Matrix 11", new PremiumMoviePricing()));
-    movieDB.put("Spiderman", new Movie("Spiderman", new RegularMoviePricing()));
-    movieDB.put("Spiderman 2", new Movie("Spiderman 2", new RegularMoviePricing()));
-    movieDB.put("Out of Africa", new Movie("Out of Africa", new OldMoviePricing()));
-    repository = new InMemoryRentalRepository(movieDB);
-  }
-
-  @Test
-  public void find_a_movie() throws Exception
-  {
-    Movie movie = repository.findMovies("Spiderman");
-
-    assertEquals("Spiderman", movie.getTitle());
-    assertEquals(new RegularMoviePricing(), movie.getPricingModel());
+    repository = new InMemoryRentalRepository();
   }
 
   @Test
@@ -57,20 +40,14 @@ public class InMemoryRentalRepositoryTest
     List<Movie> moviesToRent = Arrays.asList(new Movie("Spiderman", new RegularMoviePricing()));
 
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
-    RentedMovies retrievedMovies = repository.retrieveRentedMovies(rentalId);
+    RentedMovies retrievedMovies = repository.findRental(rentalId);
     assertEquals(moviesToRent, retrievedMovies.getMovies());
-  }
-
-  @Test(expected = MovieNotFoundException.class)
-  public void movie_not_found() throws Exception
-  {
-    repository.findMovies("Not existent movie");
   }
 
   @Test(expected = RentalNotFoundException.class)
   public void rental_not_found() throws Exception
   {
-    repository.retrieveRentedMovies(UUID.randomUUID());
+    repository.findRental(UUID.randomUUID());
   }
 
   @Test(expected = RentalNotFoundException.class)
@@ -80,7 +57,7 @@ public class InMemoryRentalRepositoryTest
 
     UUID rentalId = repository.rentMovies(moviesToRent, tomorrow());
     repository.closeRental(rentalId);
-    repository.retrieveRentedMovies(rentalId);
+    repository.findRental(rentalId);
   }
 
   private LocalDate tomorrow()

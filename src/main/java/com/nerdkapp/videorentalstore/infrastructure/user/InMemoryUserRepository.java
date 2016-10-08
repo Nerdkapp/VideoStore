@@ -1,12 +1,20 @@
-package com.nerdkapp.videorentalstore.infrastructure.rental;
+package com.nerdkapp.videorentalstore.infrastructure.user;
 
 import com.nerdkapp.videorentalstore.domain.user.UserRepository;
+import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class InMemoryUserRepository implements UserRepository
 {
   private Map<String, Integer> users;
+
+  public InMemoryUserRepository()
+  {
+    users = new HashMap<>();
+  }
 
   public InMemoryUserRepository(Map<String, Integer> users)
   {
