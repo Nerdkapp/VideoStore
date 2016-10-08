@@ -20,13 +20,15 @@ import java.util.stream.Collectors;
 @Component
 public class DefaultRentalShop implements RentalShop
 {
+  private final UserService userService;
   private final Currency currency;
   private RentalRepository rentalRepository;
 
   @Autowired
-  public DefaultRentalShop(RentalRepository rentalRepository, Currency currency)
+  public DefaultRentalShop(RentalRepository rentalRepository, UserService userService, Currency currency)
   {
     this.rentalRepository = rentalRepository;
+    this.userService = userService;
     this.currency = currency;
   }
 
@@ -41,6 +43,8 @@ public class DefaultRentalShop implements RentalShop
   {
     List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
     UUID rentalId = rentalRepository.rentMovies(movies, endRentalDate);
+
+    userService.addBonusPoints(user, movies);
 
     return new RentalReceipt(rentalId, calculateExpectedPrice(movies, startRentalDate, endRentalDate));
   }

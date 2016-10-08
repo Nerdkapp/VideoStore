@@ -28,7 +28,9 @@ public class DefaultRentalShopTest
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
   RentalRepository rentalRepository = context.mock(RentalRepository.class);
-  RentalShop rentalShop = new DefaultRentalShop(rentalRepository, Currency.getInstance("SEK"));
+  UserService userService = context.mock(UserService.class);
+
+  RentalShop rentalShop = new DefaultRentalShop(rentalRepository, userService, Currency.getInstance("SEK"));
 
   Currency SEK = Currency.getInstance("SEK");
 
@@ -47,18 +49,20 @@ public class DefaultRentalShopTest
   {
     String movie = "Spiderman";
     Movie movieFoundOnRepo = new Movie(movie, new PremiumMoviePricing());
+    String userId = "an_user";
 
     UUID rentalId = UUID.randomUUID();
     Price expectedPrice = new Price(new BigDecimal("40.00"), Currency.getInstance("SEK"));
 
     context.checking(new Expectations(){{
       oneOf(rentalRepository).findMovie(movie);
-      will(returnValue(movieFoundOnRepo));
+        will(returnValue(movieFoundOnRepo));
       oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo), tomorrow());
-      will(returnValue(rentalId));
+        will(returnValue(rentalId));
+      oneOf(userService).addBonusPoints(userId, Arrays.asList(movieFoundOnRepo));
     }});
 
-    RentalReceipt receipt = rentalShop.rent("an_user", Arrays.asList(movie), today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent(userId, Arrays.asList(movie), today(), tomorrow());
     assertEquals(rentalId, receipt.getRentalId());
     assertEquals(expectedPrice, receipt.getPrice());
   }
@@ -68,18 +72,21 @@ public class DefaultRentalShopTest
   {
     String movie = "Spiderman";
     Movie movieFoundOnRepo = new Movie(movie, new RegularMoviePricing());
+    String userId = "an_user";
 
     UUID rentalId = UUID.randomUUID();
     Price expectedPrice = new Price(new BigDecimal("30.00"), Currency.getInstance("SEK"));
 
+
     context.checking(new Expectations(){{
       oneOf(rentalRepository).findMovie(movie);
-      will(returnValue(movieFoundOnRepo));
+        will(returnValue(movieFoundOnRepo));
       oneOf(rentalRepository).rentMovies(Arrays.asList(movieFoundOnRepo), tomorrow());
-      will(returnValue(rentalId));
+        will(returnValue(rentalId));
+      oneOf(userService).addBonusPoints(userId, Arrays.asList(movieFoundOnRepo));
     }});
 
-    RentalReceipt receipt = rentalShop.rent("an_user", Arrays.asList(movie), today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent(userId, Arrays.asList(movie), today(), tomorrow());
     assertEquals(rentalId, receipt.getRentalId());
     assertEquals(expectedPrice, receipt.getPrice());
   }
@@ -90,6 +97,7 @@ public class DefaultRentalShopTest
     List<String> movies = Arrays.asList("Matrix", "Spiderman 100");
     Movie firstMovie = new Movie("Matrix", new PremiumMoviePricing());
     Movie secondMovie = new Movie("Spiderman 100", new RegularMoviePricing());
+    String userId = "an_user";
 
     UUID rentalId = UUID.randomUUID();
 
@@ -100,9 +108,11 @@ public class DefaultRentalShopTest
       will(returnValue(secondMovie));
       oneOf(rentalRepository).rentMovies(Arrays.asList(firstMovie, secondMovie), tomorrow());
       will(returnValue(rentalId));
+      oneOf(userService).addBonusPoints(userId, Arrays.asList(firstMovie, secondMovie));
+
     }});
 
-    RentalReceipt receipt = rentalShop.rent("an_user", movies, today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent(userId, movies, today(), tomorrow());
 
     Price expectedPrice = new Price( new BigDecimal("70.00"), Currency.getInstance("SEK"));
     assertEquals(expectedPrice, receipt.getPrice());
