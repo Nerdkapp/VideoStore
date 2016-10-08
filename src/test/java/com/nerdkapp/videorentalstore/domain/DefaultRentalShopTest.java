@@ -58,7 +58,7 @@ public class DefaultRentalShopTest
       will(returnValue(rentalId));
     }});
 
-    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent("an_user", Arrays.asList(movie), today(), tomorrow());
     assertEquals(rentalId, receipt.getRentalId());
     assertEquals(expectedPrice, receipt.getPrice());
   }
@@ -79,7 +79,7 @@ public class DefaultRentalShopTest
       will(returnValue(rentalId));
     }});
 
-    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent("an_user", Arrays.asList(movie), today(), tomorrow());
     assertEquals(rentalId, receipt.getRentalId());
     assertEquals(expectedPrice, receipt.getPrice());
   }
@@ -102,7 +102,7 @@ public class DefaultRentalShopTest
       will(returnValue(rentalId));
     }});
 
-    RentalReceipt receipt = rentalShop.rent(movies, today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent("an_user", movies, today(), tomorrow());
 
     Price expectedPrice = new Price( new BigDecimal("70.00"), Currency.getInstance("SEK"));
     assertEquals(expectedPrice, receipt.getPrice());
@@ -124,7 +124,7 @@ public class DefaultRentalShopTest
       will(throwException(new MovieNotFoundException()));
     }});
 
-    RentalReceipt receipt = rentalShop.rent(Arrays.asList(movie), today(), tomorrow());
+    RentalReceipt receipt = rentalShop.rent("an_user", Arrays.asList(movie), today(), tomorrow());
     assertEquals(rentalId, receipt.getRentalId());
   }
 

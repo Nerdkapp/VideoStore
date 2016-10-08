@@ -3,7 +3,6 @@ package com.nerdkapp.videorentalstore.infrastructure.rental;
 import com.nerdkapp.videorentalstore.domain.*;
 import com.nerdkapp.videorentalstore.domain.movies.Movie;
 import com.nerdkapp.videorentalstore.domain.movies.RentedMovies;
-import com.nerdkapp.videorentalstore.domain.rental.Rental;
 import com.nerdkapp.videorentalstore.domain.rental.RentalReceipt;
 import com.nerdkapp.videorentalstore.domain.rental.RentalRepository;
 import com.nerdkapp.videorentalstore.domain.rental.RentalShop;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +37,7 @@ public class DefaultRentalShop implements RentalShop
   }
 
   @Override
-  public RentalReceipt rent(List<String> moviesToRent, LocalDate startRentalDate, LocalDate endRentalDate)
+  public RentalReceipt rent(String user, List<String> moviesToRent, LocalDate startRentalDate, LocalDate endRentalDate)
   {
     List<Movie> movies = moviesToRent.stream().map(title -> rentalRepository.findMovie(title)).collect(Collectors.toList());
     UUID rentalId = rentalRepository.rentMovies(movies, endRentalDate);

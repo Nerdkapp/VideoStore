@@ -21,13 +21,13 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
-public class RentResourceTest
+public class RentalsResourceTest
 {
   @Rule
   public JUnitRuleMockery context = new JUnitRuleMockery();
 
   private RentalShop rentalShop = context.mock(RentalShop.class);
-  private RentResource rentResource = new RentResource(rentalShop);
+  private RentalsResource rentalsResource = new RentalsResource(rentalShop);
 
   @Test
   public void rent_a_movie() throws Exception
@@ -42,13 +42,14 @@ public class RentResourceTest
 
     context.checking(new Expectations(){{
       oneOf(rentalShop).rent(
+          "lcoccia",
           moviesList,
           rentalRequest.getStartRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
           rentalRequest.getEndRentalDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
       will(returnValue(new RentalReceipt(rentalId, price)));
     }});
 
-    RentalResponse rentalResponse = rentResource.rent("lcoccia", rentalRequest);
+    RentalResponse rentalResponse = rentalsResource.rent("lcoccia", rentalRequest);
 
     assertEquals(rentalId, rentalResponse.getRentalId());
     assertEquals(price.getAmount(), rentalResponse.getAmountToPay());
@@ -66,7 +67,7 @@ public class RentResourceTest
       will(returnValue(price));
     }});
 
-    ReturnMoviesResponse rentalResponse = rentResource.returnMovies("lcoccia", rentalId, new ReturnMoviesRequest(tomorrowAsDate()));
+    ReturnMoviesResponse rentalResponse = rentalsResource.returnMovies("lcoccia", rentalId, new ReturnMoviesRequest(tomorrowAsDate()));
     assertEquals(new BigDecimal("100.00"), rentalResponse.getAmountToPay());
     assertEquals(Currency.getInstance("SEK"), rentalResponse.getCurrency());
   }

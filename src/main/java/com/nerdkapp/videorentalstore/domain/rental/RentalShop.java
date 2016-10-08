@@ -9,5 +9,5 @@ import java.util.UUID;
 public interface RentalShop
 {
   Price returnMovies(UUID rentalId, LocalDate localDate);
-  RentalReceipt rent(List<String> movies, LocalDate startRentalDate, LocalDate endRentalData);
+  RentalReceipt rent(String user, List<String> movies, LocalDate startRentalDate, LocalDate endRentalData);
 }

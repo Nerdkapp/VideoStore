@@ -20,15 +20,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(path = "/rent")
-public class RentResource
+@RequestMapping(path = "/rentals")
+public class RentalsResource
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger(RentResource.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RentalsResource.class);
 
   private RentalShop rentalShop;
 
   @Autowired
-  public RentResource(RentalShop rentalShop)
+  public RentalsResource(RentalShop rentalShop)
   {
     this.rentalShop = rentalShop;
   }
@@ -44,9 +44,10 @@ public class RentResource
         map(r -> r.getTitle()).
         collect(Collectors.toList());
 
-    RentalReceipt rentalReceipt = rentalShop.rent(moviesToRent,
-        convertToLocalDate(rentalRequest.getStartRentalDate()),
-        convertToLocalDate(rentalRequest.getEndRentalDate()));
+    RentalReceipt rentalReceipt = rentalShop.rent(
+        userId,
+        moviesToRent,
+        convertToLocalDate(rentalRequest.getStartRentalDate()), convertToLocalDate(rentalRequest.getEndRentalDate()));
 
     LOGGER.info("Rental receipt: {}", rentalReceipt);
 
